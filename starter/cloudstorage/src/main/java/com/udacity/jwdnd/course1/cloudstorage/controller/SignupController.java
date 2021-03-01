@@ -20,12 +20,12 @@ public class SignupController {
     }
 
     @GetMapping()
-    public String signupView() {
+    public String signupView(@ModelAttribute("user") User user) {
         return "signup";
     }
 
     @PostMapping()
-    public String signupUser(@ModelAttribute User user, Model model) {
+    public String signupUser(@ModelAttribute("user") User user, Model model) {
         String signupError = null;
 
         if (!userService.isUsernameAvailable(user.getUsername())) {

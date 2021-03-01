@@ -12,15 +12,17 @@
 <div class="container">
     <div id="logoutDiv">
         <form action="#" method="POST" th:action="@{/logout}">
-            <button id="logout-button" class="btn btn-secondary float-right" type="submit">Logout</button>
+            <button class="btn btn-secondary float-right" id="logout-button" type="submit">Logout</button>
         </form>
     </div>
     <div id="contentDiv" style="clear: right;">
         <nav style="clear: right;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <a aria-controls="nav-files" aria-selected="true" class="nav-item nav-link active" data-toggle="tab" href="#nav-files"
+                <a aria-controls="nav-files" aria-selected="true" class="nav-item nav-link active" data-toggle="tab"
+                   href="#nav-files"
                    id="nav-files-tab" role="tab">Files</a>
-                <a aria-controls="nav-notes" aria-selected="false" class="nav-item nav-link" data-toggle="tab" href="#nav-notes"
+                <a aria-controls="nav-notes" aria-selected="false" class="nav-item nav-link" data-toggle="tab"
+                   href="#nav-notes"
                    id="nav-notes-tab" role="tab">Notes</a>
                 <a aria-controls="nav-credentials" aria-selected="false" class="nav-item nav-link" data-toggle="tab"
                    href="#nav-credentials" id="nav-credentials-tab" role="tab">Credentials</a>
@@ -64,7 +66,8 @@
                 </div>
             </div>
             <div aria-labelledby="nav-notes-tab" class="tab-pane fade" id="nav-notes" role="tabpanel">
-                <button class="btn btn-info float-right" onclick="showNoteModal()" style="margin: 0.25em;"
+                <button class="btn btn-info float-right" id="new-note-button" onclick="showNoteModal()"
+                        style="margin: 0.25em;"
                         type="button">
                     + Add a New Note
                 </button>
@@ -79,13 +82,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="note: ${notes}">
                             <td>
                                 <button class="btn btn-success" type="button">Edit</button>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row">Example Note Title</th>
-                            <td>Example Note Description</td>
+                            <th th:if="${#lists.isEmpty(notes)}" scope="row">Example Note Title</th>
+                            <td th:if="${#lists.isEmpty(notes)}">Example Note Description</td>
+                            <th th:unless="${#lists.isEmpty(notes)}" th:text="${note.noteTitle}" scope="row"></th>
+                            <td th:unless="${#lists.isEmpty(notes)}" th:text="${note.noteDescription}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -102,17 +107,18 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
+                                <form action="#" method="POST" th:action="@{/note}" th:object="${noteForm}">
                                     <input id="note-id" name="noteId" type="hidden">
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-title">Title</label>
                                         <input class="form-control" id="note-title" maxlength="20" name="noteTitle"
-                                               required type="text">
+                                               required th:field="*{noteTitle}" type="text">
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-description">Description</label>
                                         <textarea class="form-control" id="note-description" maxlength="1000"
-                                                  name="noteDescription" required rows="5"></textarea>
+                                                  name="noteDescription" required rows="5"
+                                                  th:field="*{noteDescription}"></textarea>
                                     </div>
                                     <button class="d-none" id="noteSubmit" type="submit"></button>
                                 </form>
@@ -177,12 +183,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-title">Username</label>
-                                        <input class="form-control" id="credential-username" maxlength="30" name="username"
+                                        <input class="form-control" id="credential-username" maxlength="30"
+                                               name="username"
                                                required type="text">
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-title">Password</label>
-                                        <input class="form-control" id="credential-password" maxlength="30" name="password"
+                                        <input class="form-control" id="credential-password" maxlength="30"
+                                               name="password"
                                                required type="text">
                                     </div>
                                     <button class="d-none" id="credentialSubmit" type="submit"></button>
