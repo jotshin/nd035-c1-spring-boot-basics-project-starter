@@ -87,10 +87,10 @@
                                 <button class="btn btn-success" type="button">Edit</button>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
-                            <th th:if="${#lists.isEmpty(notes)}" scope="row">Example Note Title</th>
+                            <th scope="row" th:if="${#lists.isEmpty(notes)}">Example Note Title</th>
                             <td th:if="${#lists.isEmpty(notes)}">Example Note Description</td>
-                            <th th:unless="${#lists.isEmpty(notes)}" th:text="${note.noteTitle}" scope="row"></th>
-                            <td th:unless="${#lists.isEmpty(notes)}" th:text="${note.noteDescription}"></td>
+                            <th scope="row" th:text="${note.noteTitle}" th:unless="${#lists.isEmpty(notes)}"></th>
+                            <td th:text="${note.noteDescription}" th:unless="${#lists.isEmpty(notes)}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -112,13 +112,12 @@
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-title">Title</label>
                                         <input class="form-control" id="note-title" maxlength="20" name="noteTitle"
-                                               required th:field="*{noteTitle}" type="text">
+                                               required type="text">
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-description">Description</label>
                                         <textarea class="form-control" id="note-description" maxlength="1000"
-                                                  name="noteDescription" required rows="5"
-                                                  th:field="*{noteDescription}"></textarea>
+                                                  name="noteDescription" required rows="5"></textarea>
                                     </div>
                                     <button class="d-none" id="noteSubmit" type="submit"></button>
                                 </form>
