@@ -5,12 +5,15 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
@@ -44,36 +47,26 @@ class CloudStorageApplicationTests {
     @Test
     public void getUnauthorizedLoginPageAccess() {
         driver.get(baseURL + "/login");
-        Assertions.assertEquals("Login", driver.getTitle());
+        assertEquals("Login", driver.getTitle());
     }
 
     @Test
     public void testUnauthorizedSignupPageAccess() {
         driver.get(baseURL + "/signup");
 
-        Assertions.assertEquals("Sign Up", driver.getTitle());
+        assertEquals("Sign Up", driver.getTitle());
     }
 
     @Test
     public void testUnauthorizedAccess() {
         driver.get(baseURL + "/home");
 
-        Assertions.assertEquals("Login", driver.getTitle());
+        assertEquals("Login", driver.getTitle());
     }
 
     @Test
     public void testSigningInAndChat() {
-        String username = "tj";
-
-		driver.get(baseURL + "/signup");
-
-		signupPage.fillInfoAndSubmit(username);
-
-        driver.get(baseURL + "/login");
-
-        waitUntilElementIdFound(loginPage.signupLinkString);
-
-        loginPage.fillInfoAndSubmit(username);
+        signupAndLoginTestAccount();
 
         WebElement logoutButton = waitUntilElementIdFound(homePage.logoutButtonString);
         assertNotNull(logoutButton);
@@ -85,9 +78,66 @@ class CloudStorageApplicationTests {
         testUnauthorizedAccess();
     }
 
+    @Test
+    public void testCreateNote() {
+        signupAndLoginTestAccount();
+
+        WebElement navNotesTab = waitUntilElementIdFound(homePage.navNotesTabString);
+        navNotesTab.click();
+
+        WebElement newNoteButton = waitUntilElementIdFound(homePage.newNoteButtonString);
+        assertNotNull(newNoteButton);
+
+        WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
+        assertEquals(header.getText(), "Example Note Title");
+
+        newNoteButton.click();
+
+        waitUntilElementIdFound(homePage.newNoteTitleString);
+        homePage.fillNoteInfoAndSubmit();
+
+        navNotesTab = waitUntilElementIdFound(homePage.navNotesTabString);
+        navNotesTab.click();
+
+        waitUntilElementIdFound(homePage.newNoteButtonString);
+        header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
+        assertEquals(header.getText(), "test");
+    }
+
+    private void signupAndLoginTestAccount() {
+        String username = "tj";
+
+        driver.get(baseURL + "/signup");
+
+        signupPage.fillInfoAndSubmit(username);
+
+        driver.get(baseURL + "/login");
+
+        waitUntilElementIdFound(loginPage.signupLinkString);
+
+        loginPage.fillInfoAndSubmit(username);
+    }
+
+//    private void fillLoginInfoAndVerify(String username) {
+//        waitUntilElementIdFound(loginPage.signupLinkString);
+//
+//        loginPage.fillInfoAndSubmit(username);
+//
+//        WebElement messageText = waitUntilElementIdFound("messageText");
+//        assertNotNull(messageText);
+//
+//        if (username == "tj") {
+//            waitUntilElementIdFound(chat.messageTextString);
+//            chat.fillInfoAndSubmit();
+//        }
+//
+//        WebElement span = waitUntilElementTagFound("span");
+//        assertTrue(span.getText().contains("tj: Test"));
+//    }
+
     private WebElement waitUntilElementIdFound(String id) {
         WebDriverWait wait = new WebDriverWait(driver, 3);
-        return wait.until(webDriver -> webDriver.findElement(By.id(id)));
+        return wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 
     private WebElement waitUntilElementTagFound(String tag) {
