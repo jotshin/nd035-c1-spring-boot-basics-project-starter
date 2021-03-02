@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,8 @@ public class NoteController {
     }
 
     @PostMapping()
-    public String postNote(@ModelAttribute("noteForm") NoteForm noteForm, Model model, Principal principal) {
-        noteService.createNote(noteForm, principal.getName());
-        noteForm.setNoteTitle("");
-        noteForm.setNoteDescription("");
+    public String postNote(@ModelAttribute("noteForm") Note note, Model model, Principal principal) {
+        noteService.createNote(note, principal.getName());
         model.addAttribute("notes", noteService.getNotes(principal.getName()));
         return "home";
     }
