@@ -83,16 +83,14 @@
                         </thead>
                         <tbody>
                         <tr th:if="${#lists.isEmpty(notes)}">
-                            <td>
-                                <button class="btn btn-success" type="button">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
-                            </td>
-                            <th scope="row" >Example Note Title</th>
+                            <td/>
+                            <th scope="row">Example Note Title</th>
                             <td>Example Note Description</td>
                         </tr>
-                        <tr th:unless="${#lists.isEmpty(notes)}" th:each="note: ${notes}">
+                        <tr th:each="note: ${notes}" th:unless="${#lists.isEmpty(notes)}">
                             <td>
-                                <button class="btn btn-success" type="button">Edit</button>
+                                <a class="btn btn-success" id="editNote"
+                                   th:onclick="'javascript:showNoteModal(\'' + ${note.getNoteId()} + '\');'">Edit</a>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row" th:text="${note.noteTitle}"></th>
@@ -222,10 +220,20 @@
 <!--For opening the note modal-->
 <script type="text/javascript">
     // For opening the note modal
-    function showNoteModal(noteId, noteTitle, noteDescription) {
-        $('#note-id').val(noteId ? noteId : '');
-        $('#note-title').val(noteTitle ? noteTitle : '');
-        $('#note-description').val(noteDescription ? noteDescription : '');
+    function showNoteModal(id) {
+        if ((id !== undefined)) {
+            $(document).ready(function () {
+                $.ajax({
+                    url: "http://localhost:8080/getNote/" + id
+                }).then(function (data) {
+                    console.log(data)
+                    $('#note-id').val(data.noteId);
+                    $('#note-title').val(data.noteTitle);
+                    $('#note-description').val(data.noteDescription);
+                    $('#noteModal').modal('show');
+                });
+            });
+        }
         $('#noteModal').modal('show');
     }
 
@@ -238,5 +246,7 @@
         $('#credentialModal').modal('show');
     }
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </body>
 </html>
