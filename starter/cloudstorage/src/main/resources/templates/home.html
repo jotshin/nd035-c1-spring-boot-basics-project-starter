@@ -82,15 +82,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="note: ${notes}">
+                        <tr th:if="${#lists.isEmpty(notes)}">
                             <td>
                                 <button class="btn btn-success" type="button">Edit</button>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row" th:if="${#lists.isEmpty(notes)}">Example Note Title</th>
-                            <td th:if="${#lists.isEmpty(notes)}">Example Note Description</td>
-                            <th scope="row" th:text="${note.noteTitle}" th:unless="${#lists.isEmpty(notes)}"></th>
-                            <td th:text="${note.noteDescription}" th:unless="${#lists.isEmpty(notes)}"></td>
+                            <th scope="row" >Example Note Title</th>
+                            <td>Example Note Description</td>
+                        </tr>
+                        <tr th:unless="${#lists.isEmpty(notes)}" th:each="note: ${notes}">
+                            <td>
+                                <button class="btn btn-success" type="button">Edit</button>
+                                <a class="btn btn-danger">Delete</a>
+                            </td>
+                            <th scope="row" th:text="${note.noteTitle}"></th>
+                            <td th:text="${note.noteDescription}"></td>
                         </tr>
                         </tbody>
                     </table>
