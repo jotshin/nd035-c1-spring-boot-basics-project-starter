@@ -10,7 +10,8 @@ public class HomePage {
     public static final String navNotesTabString = "nav-notes-tab";
     public static final String newNoteButtonString = "new-note-button";
     public static final String noteSubmitButtonString = "#noteModal > div > div > div.modal-footer > button.btn.btn-primary";
-    public static final String newNoteTitleString = "note-title";
+    public static final String noteTitleString = "note-title";
+    public static final String noteEditButtonString = "editNote";
 
     @FindBy(id = logoutButtonString)
     private WebElement logoutButton;
@@ -21,7 +22,7 @@ public class HomePage {
     @FindBy(id = newNoteButtonString)
     private WebElement newNoteButton;
 
-    @FindBy(id = newNoteTitleString)
+    @FindBy(id = noteTitleString)
     private WebElement noteTitleField;
 
     @FindBy(id = "note-description")
@@ -30,12 +31,15 @@ public class HomePage {
     @FindBy(css = noteSubmitButtonString)
     private WebElement noteSubmitButton;
 
+    @FindBy(css = noteEditButtonString)
+    private WebElement noteEditButton;
+
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
-    public void fillNoteInfoAndSubmit() {
-        noteTitleField.sendKeys("test");
+    public void fillNoteInfoAndSubmit(String title) {
+        noteTitleField.sendKeys(title);
         noteDescriptionField.sendKeys("1234");
         noteSubmitButton.click();
     }

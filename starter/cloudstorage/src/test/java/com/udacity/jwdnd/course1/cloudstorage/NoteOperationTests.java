@@ -16,6 +16,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.Alphanumeric.class)
 class NoteOperationTests {
 
     private static WebDriver driver;
@@ -48,29 +49,45 @@ class NoteOperationTests {
     public void testCreateNote() {
         signupAndLogin();
 
-        WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title");
+        WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title", homePage.newNoteButtonString);
 
         newNoteButton.click();
 
-        waitUntilElementClickable(homePage.newNoteTitleString);
-        homePage.fillNoteInfoAndSubmit();
+        waitUntilElementClickable(homePage.noteTitleString);
+        homePage.fillNoteInfoAndSubmit("test");
 
-        navigateToNoteTabAndCheckTitle("test");
+        navigateToNoteTabAndCheckTitle("test", homePage.newNoteButtonString);
 
         logout();
     }
 
-    private WebElement navigateToNoteTabAndCheckTitle(String title) {
+    @Test
+    public void testEditNote() {
+        login();
+
+        WebElement button = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
+
+        button.click();
+
+        waitUntilElementClickable(homePage.noteTitleString);
+        homePage.fillNoteInfoAndSubmit("test1");
+
+        navigateToNoteTabAndCheckTitle("test1", homePage.noteEditButtonString);
+
+        logout();
+    }
+
+    private WebElement navigateToNoteTabAndCheckTitle(String title, String buttonId) {
         WebElement navNotesTab = waitUntilElementClickable(homePage.navNotesTabString);
         navNotesTab.click();
 
-        WebElement newNoteButton = waitUntilElementClickable(homePage.newNoteButtonString);
-        assertNotNull(newNoteButton);
+        WebElement button = waitUntilElementClickable(buttonId);
+        assertNotNull(button);
 
         WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
         assertEquals(header.getText(), title);
 
-        return newNoteButton;
+        return button;
     }
 
     private void signupAndLogin() {
@@ -79,6 +96,12 @@ class NoteOperationTests {
         driver.get(baseURL + "/signup");
 
         signupPage.fillInfoAndSubmit(username);
+
+        login();
+    }
+
+    private void login() {
+        String username = "tj";
 
         driver.get(baseURL + "/login");
 
