@@ -5,13 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,45 +63,43 @@ class CloudStorageApplicationTests {
 
     @Test
     public void testSigningInAndChat() {
-        signupAndLoginTestAccount();
+        signupAndLogin();
 
-        WebElement logoutButton = waitUntilElementIdFound(homePage.logoutButtonString);
-        assertNotNull(logoutButton);
-
-        logoutButton.click();
-
-        waitUntilElementIdFound(loginPage.signupLinkString);
+        logout();
 
         testUnauthorizedAccess();
     }
 
     @Test
     public void testCreateNote() {
-        signupAndLoginTestAccount();
+        signupAndLogin();
 
-        WebElement navNotesTab = waitUntilElementIdFound(homePage.navNotesTabString);
-        navNotesTab.click();
-
-        WebElement newNoteButton = waitUntilElementIdFound(homePage.newNoteButtonString);
-        assertNotNull(newNoteButton);
-
-        WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
-        assertEquals(header.getText(), "Example Note Title");
+        WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title");
 
         newNoteButton.click();
 
-        waitUntilElementIdFound(homePage.newNoteTitleString);
+        waitUntilElementClickable(homePage.newNoteTitleString);
         homePage.fillNoteInfoAndSubmit();
 
-        navNotesTab = waitUntilElementIdFound(homePage.navNotesTabString);
-        navNotesTab.click();
+        navigateToNoteTabAndCheckTitle("test");
 
-        waitUntilElementIdFound(homePage.newNoteButtonString);
-        header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
-        assertEquals(header.getText(), "test");
+        logout();
     }
 
-    private void signupAndLoginTestAccount() {
+    private WebElement navigateToNoteTabAndCheckTitle(String title) {
+        WebElement navNotesTab = waitUntilElementClickable(homePage.navNotesTabString);
+        navNotesTab.click();
+
+        WebElement newNoteButton = waitUntilElementClickable(homePage.newNoteButtonString);
+        assertNotNull(newNoteButton);
+
+        WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
+        assertEquals(header.getText(), title);
+
+        return newNoteButton;
+    }
+
+    private void signupAndLogin() {
         String username = "tj";
 
         driver.get(baseURL + "/signup");
@@ -113,9 +108,18 @@ class CloudStorageApplicationTests {
 
         driver.get(baseURL + "/login");
 
-        waitUntilElementIdFound(loginPage.signupLinkString);
+        waitUntilElementClickable(loginPage.signupLinkString);
 
         loginPage.fillInfoAndSubmit(username);
+    }
+
+    private void logout() {
+        WebElement logoutButton = waitUntilElementClickable(homePage.logoutButtonString);
+        assertNotNull(logoutButton);
+
+        logoutButton.click();
+
+        waitUntilElementClickable(loginPage.signupLinkString);
     }
 
 //    private void fillLoginInfoAndVerify(String username) {
@@ -135,7 +139,7 @@ class CloudStorageApplicationTests {
 //        assertTrue(span.getText().contains("tj: Test"));
 //    }
 
-    private WebElement waitUntilElementIdFound(String id) {
+    private WebElement waitUntilElementClickable(String id) {
         WebDriverWait wait = new WebDriverWait(driver, 3);
         return wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
