@@ -13,7 +13,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CloudStorageApplicationTests {
+class NoteOperationTests {
 
     private static WebDriver driver;
     private String baseURL;
@@ -39,35 +39,6 @@ class CloudStorageApplicationTests {
         signupPage = new SignupPage(driver);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
-    }
-
-    @Test
-    public void getUnauthorizedLoginPageAccess() {
-        driver.get(baseURL + "/login");
-        assertEquals("Login", driver.getTitle());
-    }
-
-    @Test
-    public void testUnauthorizedSignupPageAccess() {
-        driver.get(baseURL + "/signup");
-
-        assertEquals("Sign Up", driver.getTitle());
-    }
-
-    @Test
-    public void testUnauthorizedAccess() {
-        driver.get(baseURL + "/home");
-
-        assertEquals("Login", driver.getTitle());
-    }
-
-    @Test
-    public void testSigningInAndChat() {
-        signupAndLogin();
-
-        logout();
-
-        testUnauthorizedAccess();
     }
 
     @Test
@@ -122,30 +93,8 @@ class CloudStorageApplicationTests {
         waitUntilElementClickable(loginPage.signupLinkString);
     }
 
-//    private void fillLoginInfoAndVerify(String username) {
-//        waitUntilElementIdFound(loginPage.signupLinkString);
-//
-//        loginPage.fillInfoAndSubmit(username);
-//
-//        WebElement messageText = waitUntilElementIdFound("messageText");
-//        assertNotNull(messageText);
-//
-//        if (username == "tj") {
-//            waitUntilElementIdFound(chat.messageTextString);
-//            chat.fillInfoAndSubmit();
-//        }
-//
-//        WebElement span = waitUntilElementTagFound("span");
-//        assertTrue(span.getText().contains("tj: Test"));
-//    }
-
     private WebElement waitUntilElementClickable(String id) {
         WebDriverWait wait = new WebDriverWait(driver, 3);
         return wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
-    }
-
-    private WebElement waitUntilElementTagFound(String tag) {
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        return wait.until(webDriver -> webDriver.findElement(By.tagName(tag)));
     }
 }
