@@ -93,8 +93,8 @@
                                    th:onclick="'javascript:showNoteModal(\'' + ${note.getNoteId()} + '\');'">Edit</a>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
-                            <th scope="row" th:text="${note.noteTitle}"></th>
-                            <td th:text="${note.noteDescription}"></td>
+                            <th scope="row" th:text="${note.getNoteTitle()}"></th>
+                            <td th:text="${note.getNoteDescription()}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -224,7 +224,7 @@
         if ((id !== undefined)) {
             $(document).ready(function () {
                 $.ajax({
-                    url: "http://localhost:8080/getNote/" + id
+                    url: "http://localhost:8080/note/" + id
                 }).then(function (data) {
                     console.log(data)
                     $('#note-id').val(data.noteId);

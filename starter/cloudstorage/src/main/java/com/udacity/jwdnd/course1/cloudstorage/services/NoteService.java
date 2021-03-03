@@ -19,13 +19,25 @@ public class NoteService {
     }
 
     public int createNote(Note note, String username) {
-        User user = userMapper.getUser(username);
-        note.setUserId(user.getUserId());
-        return noteMapper.insert(note);
+        Note foundNote = noteMapper.getNote(note.getNoteId());
+        if (foundNote != null) {
+            foundNote.setNoteTitle(note.getNoteTitle());
+            foundNote.setNoteDescription(note.getNoteDescription());
+            noteMapper.updateNote(foundNote);
+            return foundNote.getNoteId();
+        } else {
+            User user = userMapper.getUser(username);
+            note.setUserId(user.getUserId());
+            return noteMapper.insert(note);
+        }
     }
 
     public List<Note> getNotes(String username) {
         User user = userMapper.getUser(username);
         return noteMapper.getNotes(user.getUserId());
+    }
+
+    public Note getNote(Integer id) {
+        return noteMapper.getNote(id);
     }
 }
