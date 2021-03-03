@@ -16,12 +16,6 @@ public class HomePage {
     @FindBy(id = logoutButtonString)
     private WebElement logoutButton;
 
-    @FindBy(id = navNotesTabString)
-    private WebElement navNotesTab;
-
-    @FindBy(id = newNoteButtonString)
-    private WebElement newNoteButton;
-
     @FindBy(id = noteTitleString)
     private WebElement noteTitleField;
 
@@ -30,9 +24,6 @@ public class HomePage {
 
     @FindBy(css = noteSubmitButtonString)
     private WebElement noteSubmitButton;
-
-    @FindBy(css = noteEditButtonString)
-    private WebElement noteEditButton;
 
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);

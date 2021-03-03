@@ -65,9 +65,9 @@ class NoteOperationTests {
     public void testEditNote() {
         login();
 
-        WebElement button = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
+        WebElement editButton = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
 
-        button.click();
+        editButton.click();
 
         waitUntilElementClickable(homePage.noteTitleString);
         homePage.fillNoteInfoAndSubmit("test1");
@@ -85,7 +85,7 @@ class NoteOperationTests {
         assertNotNull(button);
 
         WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
-        assertEquals(header.getText(), title);
+        assertEquals(title, header.getText());
 
         return button;
     }
