@@ -121,7 +121,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST" th:action="@{/note}" th:object="${noteForm}">
+                                <form action="#" method="POST" th:action="@{/note}">
                                     <input id="note-id" name="noteId" type="hidden">
                                     <div class="form-group">
                                         <label class="col-form-label" for="note-title">Title</label>
@@ -158,7 +158,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" th:action="@{/note}" th:method="PUT" th:object="${noteForm}">
+                                <form action="#" th:action="@{/note}" th:method="PUT">
                                     <input id="edit-note-id" name="noteId" type="hidden">
                                     <div class="form-group">
                                         <label class="col-form-label" for="edit-note-title">Title</label>
@@ -195,7 +195,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="#" th:action="@{/note}" th:method="DELETE" th:object="${noteForm}">
+                            <form action="#" th:action="@{/note}" th:method="DELETE">
                                 Do you want to delete note?
                                 <input id="delete-note-id" name="noteId" type="hidden">
                                 <button class="d-none" id="deleteNoteSubmit" type="submit"></button>
