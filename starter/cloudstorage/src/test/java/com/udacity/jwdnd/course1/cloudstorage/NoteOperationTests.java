@@ -50,41 +50,43 @@ class NoteOperationTests {
 
     @Test
     public void testCreateNote() {
-        signupAndLogin();
+        signup();
+
+        login();
 
         WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
 
         Util.click(driver, newNoteButton);
 
         waitUntilElementClickable(noteTitleString);
-        homePage.fillNoteInfoAndSubmit("test");
+        homePage.fillNoteInfoAndSubmit("test", noteAddSubmitButtonString);
 
         navigateToNoteTabAndCheckTitle("test", newNoteButtonString);
 
         logout();
     }
 
-//    @Test
-//    public void testEditNote() {
-//        login();
-//
-//        WebElement editButton = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
-//
-//        editButton.click();
-//
-//        waitUntilElementClickable(homePage.noteTitleString);
-//        homePage.fillNoteInfoAndSubmit("test1");
-//
-//        navigateToNoteTabAndCheckTitle("test1", homePage.noteEditButtonString);
-//
-//        logout();
-//    }
-
     @Test
-    public void testDeleteNote() {
+    public void testEditNote() {
         login();
 
-        WebElement deleteButton = navigateToNoteTabAndCheckTitle("test", noteDeleteButtonString);
+        WebElement editButton = navigateToNoteTabAndCheckTitle("test", noteEditButtonString);
+
+        click(driver, editButton);
+
+        waitUntilElementClickable(noteEditTitleString);
+        homePage.fillNoteInfoAndSubmit("test1", noteEditSubmitButtonString);
+
+        navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
+
+        logout();
+    }
+
+    @Test
+    public void testRemoveNote() {
+        login();
+
+        WebElement deleteButton = navigateToNoteTabAndCheckTitle("test1", noteDeleteButtonString);
 
         click(driver, deleteButton);
 
@@ -109,14 +111,12 @@ class NoteOperationTests {
         return button;
     }
 
-    private void signupAndLogin() {
+    private void signup() {
         String username = "tj";
 
         driver.get(baseURL + "/signup");
 
         signupPage.fillInfoAndSubmit(username);
-
-        login();
     }
 
     private void login() {

@@ -20,7 +20,7 @@ public class HomeController {
     }
 
     @GetMapping()
-    public String getHomeView(@ModelAttribute("noteForm") Note note, Model model, Principal principal) {
+    public String getHomeView(Model model, Principal principal) {
         model.addAttribute("notes", noteService.getNotes(principal.getName()));
         return "home";
     }

@@ -17,21 +17,28 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @GetMapping("/{noteId}")
-    @ResponseBody
-    public Note getNote(@PathVariable(name = "noteId") String noteId) {
-        return noteService.getNote(Integer.parseInt(noteId));
+//    @GetMapping("/{noteId}")
+//    @ResponseBody
+//    public Note getNote(@PathVariable(name = "noteId") String noteId) {
+//        return noteService.getNote(Integer.parseInt(noteId));
+//    }
+
+    @PostMapping
+    public String postNote(@ModelAttribute("noteForm") Note note, Principal principal) {
+        // TODO: error handling
+        noteService.createNote(note, principal.getName());
+        return "redirect:/home";
     }
 
-    @PostMapping()
-    public String postNote(@ModelAttribute("noteForm") Note note, Model model, Principal principal) {
-        noteService.createNote(note, principal.getName());
-        model.addAttribute("notes", noteService.getNotes(principal.getName()));
-        return "home";
+    @PutMapping
+    public String updateNote(@ModelAttribute("noteForm") Note note) {
+        // TODO: error handling
+        noteService.updateNote(note);
+        return "redirect:/home";
     }
 
     @DeleteMapping
-    public String deleteNote(@ModelAttribute Note note, Model model, Principal principal) {
+    public String deleteNote(@ModelAttribute("noteForm") Note note, Principal principal) {
         // TODO: error handling
         noteService.deleteNote(note, principal.getName());
         return "redirect:/home";

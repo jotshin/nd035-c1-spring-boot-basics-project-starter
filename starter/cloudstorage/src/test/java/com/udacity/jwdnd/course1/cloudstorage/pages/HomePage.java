@@ -16,21 +16,27 @@ public class HomePage {
     @FindBy(id = noteTitleString)
     private WebElement noteTitleField;
 
+    @FindBy(id = noteEditTitleString)
+    private WebElement noteEditTitleField;
+
     @FindBy(id = noteDescriptionString)
     private WebElement noteDescriptionField;
 
     @FindBy(id = noteAddSubmitButtonString)
     private WebElement noteSubmitButton;
 
+    @FindBy(id = noteEditSubmitButtonString)
+    private WebElement noteEditSubmitButton;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
-    public void fillNoteInfoAndSubmit(String title) {
-        sendKey(driver, noteTitleField, title);
+    public void fillNoteInfoAndSubmit(String title, String id) {
+        sendKey(driver, id == noteAddSubmitButtonString ? noteTitleField : noteEditTitleField, title);
         sendKey(driver, noteDescriptionField, "1234");
-        click(driver, noteSubmitButton);
+        click(driver, id == noteAddSubmitButtonString ? noteSubmitButton : noteEditSubmitButton);
     }
 
     public void logout() {

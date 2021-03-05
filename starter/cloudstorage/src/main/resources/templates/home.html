@@ -89,39 +89,25 @@
                         </tr>
                         <tr th:each="note: ${notes}" th:unless="${#lists.isEmpty(notes)}">
                             <td>
-                                <a class="btn btn-success" id="editNote"
-                                   th:onclick="'javascript:showNoteModal(\'' + ${note.getNoteId()} + '\');'">Edit</a>
-                                <button type="button" class="btn btn-danger" id="delete-note-button" th:note-id="${note.getNoteId()}" onclick="showDeleteNoteModal(this.getAttribute('note-id'))">Delete</button>
+                                <button class="btn btn-success" id="edit-note-button" onclick="showEditNoteModal(this.getAttribute('note-id'),
+                                                    this.getAttribute('note-title'),
+                                                    this.getAttribute('note-description'))"
+                                        th:note-description="${note.getNoteDescription()}"
+                                        th:note-id="${note.getNoteId()}"
+                                        th:note-title="${note.getNoteTitle()}"
+                                        type="button"
+                                >Edit
+                                </button>
+                                <button class="btn btn-danger" id="delete-note-button" onclick="showDeleteNoteModal(this.getAttribute('note-id'))"
+                                        th:note-id="${note.getNoteId()}"
+                                        type="button">Delete
+                                </button>
                             </td>
                             <th scope="row" th:text="${note.getNoteTitle()}"></th>
                             <td th:text="${note.getNoteDescription()}"></td>
                         </tr>
                         </tbody>
                     </table>
-                </div>
-
-                <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="deleteNoteModal" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{/note}" th:method="DELETE">
-                                    Do you want to delete note?
-                                    <input type="hidden" name="noteId" id="delete-note-id">
-                                    <button type="submit" id="deleteNoteSubmit" class="d-none"></button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" id="delete-note-submit-button" onclick="$('#deleteNoteSubmit').click();">Delete</button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <div aria-hidden="true" aria-labelledby="noteModalLabel" class="modal fade" id="noteModal" role="dialog"
@@ -152,14 +138,79 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" id="add-note-submit-button" onclick="$('#noteSubmit').click();" type="button">Save
+                                <button class="btn btn-primary" id="add-note-submit-button"
+                                        onclick="$('#noteSubmit').click();" type="button">Save
                                     changes
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div aria-hidden="true" aria-labelledby="editNoteModal" class="modal fade" id="editNoteModal" role="dialog"
+                     tabindex="-1">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editNoteModal-header">Edit a Note</h5>
+                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" th:action="@{/note}" th:method="PUT" th:object="${noteForm}">
+                                    <input id="edit-note-id" name="noteId" type="hidden">
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="edit-note-title">Title</label>
+                                        <input class="form-control" id="edit-note-title" maxlength="20" name="noteTitle"
+                                               required type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label" for="edit-note-description">Description</label>
+                                        <textarea class="form-control" id="edit-note-description" maxlength="1000"
+                                                  name="noteDescription" required rows="5"></textarea>
+                                    </div>
+                                    <button class="d-none" id="editNoteSubmit" type="submit"></button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                                <button class="btn btn-primary" id="edit-note-submit-button" onclick="$('#editNoteSubmit').click();" type="button">
+                                    Save changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal" role="dialog"
+                 tabindex="-1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
+                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#" th:action="@{/note}" th:method="DELETE" th:object="${noteForm}">
+                                Do you want to delete note?
+                                <input id="delete-note-id" name="noteId" type="hidden">
+                                <button class="d-none" id="deleteNoteSubmit" type="submit"></button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                            <button class="btn btn-primary" id="delete-note-submit-button" onclick="$('#deleteNoteSubmit').click();"
+                                    type="button">Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div aria-labelledby="nav-credentials-tab" class="tab-pane fade" id="nav-credentials" role="tabpanel">
                 <button class="btn btn-info float-right" onclick="showCredentialModal()" style="margin: 0.25em;"
                         type="button">
@@ -244,21 +295,19 @@
 <!--For opening the note modal-->
 <script type="text/javascript">
     // For opening the note modal
-    function showNoteModal(id) {
-        if ((id !== undefined)) {
-            $(document).ready(function () {
-                $.ajax({
-                    url: "http://localhost:8080/note/" + id
-                }).then(function (data) {
-                    console.log(data)
-                    $('#note-id').val(data.noteId);
-                    $('#note-title').val(data.noteTitle);
-                    $('#note-description').val(data.noteDescription);
-                    $('#noteModal').modal('show');
-                });
-            });
-        }
+    function showNoteModal(noteId, noteTitle, noteDescription) {
+        console.log('i m in show note modal');
+        $('#note-id').val(noteId ? noteId : '');
+        $('#note-title').val(noteTitle ? noteTitle : '');
+        $('#note-description').val(noteDescription ? noteDescription : '');
         $('#noteModal').modal('show');
+    }
+
+    function showEditNoteModal(noteId, noteTitle, noteDescription) {
+        $('#edit-note-id').val(noteId ? noteId : '');
+        $('#edit-note-title').val(noteTitle ? noteTitle : '');
+        $('#edit-note-description').val(noteDescription ? noteDescription : '');
+        $('#editNoteModal').modal('show');
     }
 
     function showDeleteNoteModal(noteId) {
