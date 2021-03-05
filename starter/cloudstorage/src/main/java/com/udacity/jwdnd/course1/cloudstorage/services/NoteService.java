@@ -32,6 +32,12 @@ public class NoteService {
         }
     }
 
+    public int deleteNote(Note note, String username) {
+        User user = userMapper.getUser(username);
+        note.setUserId(user.getUserId());
+        return noteMapper.deleteNote(note.getNoteId());
+    }
+
     public List<Note> getNotes(String username) {
         User user = userMapper.getUser(username);
         return noteMapper.getNotes(user.getUserId());

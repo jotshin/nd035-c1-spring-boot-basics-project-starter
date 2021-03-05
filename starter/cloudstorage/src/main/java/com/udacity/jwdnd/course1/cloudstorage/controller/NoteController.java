@@ -19,9 +19,8 @@ public class NoteController {
 
     @GetMapping("/{noteId}")
     @ResponseBody
-    public Note getNote(@PathVariable(name = "noteId") String noteID) {
-        Integer noteId = Integer.parseInt(noteID);
-        return noteService.getNote(noteId);
+    public Note getNote(@PathVariable(name = "noteId") String noteId) {
+        return noteService.getNote(Integer.parseInt(noteId));
     }
 
     @PostMapping()
@@ -29,5 +28,12 @@ public class NoteController {
         noteService.createNote(note, principal.getName());
         model.addAttribute("notes", noteService.getNotes(principal.getName()));
         return "home";
+    }
+
+    @DeleteMapping
+    public String deleteNote(@ModelAttribute Note note, Model model, Principal principal) {
+        // TODO: error handling
+        noteService.deleteNote(note, principal.getName());
+        return "redirect:/home";
     }
 }

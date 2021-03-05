@@ -19,7 +19,7 @@ public class HomePage {
     @FindBy(id = noteDescriptionString)
     private WebElement noteDescriptionField;
 
-    @FindBy(css = noteSubmitButtonString)
+    @FindBy(id = noteAddSubmitButtonString)
     private WebElement noteSubmitButton;
 
     public HomePage(WebDriver driver) {

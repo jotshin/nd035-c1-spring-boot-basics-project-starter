@@ -9,11 +9,12 @@ public class Util {
     public static final String logoutButtonString = "logout-button";
     public static final String navNotesTabString = "nav-notes-tab";
     public static final String newNoteButtonString = "new-note-button";
-    public static final String noteSubmitButtonString = "#noteModal > div > div > div.modal-footer > button.btn.btn-primary";
+    public static final String noteAddSubmitButtonString = "add-note-submit-button";
     public static final String noteTitleString = "note-title";
     public static final String noteDescriptionString = "note-description";
     public static final String noteEditButtonString = "editNote";
-    public static final String noteDeleteButtonString = "deleteNote";
+    public static final String noteDeleteButtonString = "delete-note-button";
+    public static final String noteDeleteSubmitButtonString = "delete-note-submit-button";
 
     // SignupPage
     public static final String successMessage = "success-msg";

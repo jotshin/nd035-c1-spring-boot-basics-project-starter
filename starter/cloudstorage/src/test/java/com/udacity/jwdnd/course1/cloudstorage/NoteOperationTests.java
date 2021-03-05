@@ -79,19 +79,22 @@ class NoteOperationTests {
 //
 //        logout();
 //    }
-//
-//    @Test
-//    public void testRemoveNote() {
-//        login();
-//
-//        WebElement removeButton = navigateToNoteTabAndCheckTitle("test", noteDeleteButtonString);
-//
-//        removeButton.click();
-//
-//        navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
-//
-//        logout();
-//    }
+
+    @Test
+    public void testDeleteNote() {
+        login();
+
+        WebElement deleteButton = navigateToNoteTabAndCheckTitle("test", noteDeleteButtonString);
+
+        click(driver, deleteButton);
+
+        WebElement noteSubmitButton = waitUntilElementClickable(noteDeleteSubmitButtonString);
+        click(driver, noteSubmitButton);
+
+        navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
+
+        logout();
+    }
 
     private WebElement navigateToNoteTabAndCheckTitle(String title, String buttonId) {
         WebElement navNotesTab = waitUntilElementClickable(navNotesTabString);
