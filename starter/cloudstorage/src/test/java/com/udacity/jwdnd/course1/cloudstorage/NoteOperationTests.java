@@ -3,16 +3,18 @@ package com.udacity.jwdnd.course1.cloudstorage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.SignupPage;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
+import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -29,7 +31,8 @@ class NoteOperationTests {
 
     @BeforeAll
     static void beforeAll() {
-        driver = new SafariDriver();
+        WebDriverManager.chromedriver().setup();
+        driver = new ChromeDriver();
     }
 
     @AfterAll
@@ -49,37 +52,50 @@ class NoteOperationTests {
     public void testCreateNote() {
         signupAndLogin();
 
-        WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title", homePage.newNoteButtonString);
+        WebElement newNoteButton = navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
 
-        newNoteButton.click();
+        Util.click(driver, newNoteButton);
 
-        waitUntilElementClickable(homePage.noteTitleString);
+        waitUntilElementClickable(noteTitleString);
         homePage.fillNoteInfoAndSubmit("test");
 
-        navigateToNoteTabAndCheckTitle("test", homePage.newNoteButtonString);
+        navigateToNoteTabAndCheckTitle("test", newNoteButtonString);
 
         logout();
     }
 
-    @Test
-    public void testEditNote() {
-        login();
-
-        WebElement editButton = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
-
-        editButton.click();
-
-        waitUntilElementClickable(homePage.noteTitleString);
-        homePage.fillNoteInfoAndSubmit("test1");
-
-        navigateToNoteTabAndCheckTitle("test1", homePage.noteEditButtonString);
-
-        logout();
-    }
+//    @Test
+//    public void testEditNote() {
+//        login();
+//
+//        WebElement editButton = navigateToNoteTabAndCheckTitle("test", homePage.noteEditButtonString);
+//
+//        editButton.click();
+//
+//        waitUntilElementClickable(homePage.noteTitleString);
+//        homePage.fillNoteInfoAndSubmit("test1");
+//
+//        navigateToNoteTabAndCheckTitle("test1", homePage.noteEditButtonString);
+//
+//        logout();
+//    }
+//
+//    @Test
+//    public void testRemoveNote() {
+//        login();
+//
+//        WebElement removeButton = navigateToNoteTabAndCheckTitle("test", noteDeleteButtonString);
+//
+//        removeButton.click();
+//
+//        navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
+//
+//        logout();
+//    }
 
     private WebElement navigateToNoteTabAndCheckTitle(String title, String buttonId) {
-        WebElement navNotesTab = waitUntilElementClickable(homePage.navNotesTabString);
-        navNotesTab.click();
+        WebElement navNotesTab = waitUntilElementClickable(navNotesTabString);
+        click(driver, navNotesTab);
 
         WebElement button = waitUntilElementClickable(buttonId);
         assertNotNull(button);
@@ -105,18 +121,18 @@ class NoteOperationTests {
 
         driver.get(baseURL + "/login");
 
-        waitUntilElementClickable(loginPage.signupLinkString);
+        waitUntilElementClickable(signupLinkString);
 
         loginPage.fillInfoAndSubmit(username);
     }
 
     private void logout() {
-        WebElement logoutButton = waitUntilElementClickable(homePage.logoutButtonString);
+        WebElement logoutButton = waitUntilElementClickable(logoutButtonString);
         assertNotNull(logoutButton);
 
-        logoutButton.click();
+        click(driver, logoutButton);
 
-        waitUntilElementClickable(loginPage.signupLinkString);
+        waitUntilElementClickable(signupLinkString);
     }
 
     private WebElement waitUntilElementClickable(String id) {

@@ -5,13 +5,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
+
 public class HomePage {
-    public static final String logoutButtonString = "logout-button";
-    public static final String navNotesTabString = "nav-notes-tab";
-    public static final String newNoteButtonString = "new-note-button";
-    public static final String noteSubmitButtonString = "#noteModal > div > div > div.modal-footer > button.btn.btn-primary";
-    public static final String noteTitleString = "note-title";
-    public static final String noteEditButtonString = "editNote";
+    private final WebDriver driver;
 
     @FindBy(id = logoutButtonString)
     private WebElement logoutButton;
@@ -19,23 +16,24 @@ public class HomePage {
     @FindBy(id = noteTitleString)
     private WebElement noteTitleField;
 
-    @FindBy(id = "note-description")
+    @FindBy(id = noteDescriptionString)
     private WebElement noteDescriptionField;
 
     @FindBy(css = noteSubmitButtonString)
     private WebElement noteSubmitButton;
 
     public HomePage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     public void fillNoteInfoAndSubmit(String title) {
-        noteTitleField.sendKeys(title);
-        noteDescriptionField.sendKeys("1234");
-        noteSubmitButton.click();
+        sendKey(driver, noteTitleField, title);
+        sendKey(driver, noteDescriptionField, "1234");
+        click(driver, noteSubmitButton);
     }
 
     public void logout() {
-        logoutButton.click();
+        click(driver, logoutButton);
     }
 }

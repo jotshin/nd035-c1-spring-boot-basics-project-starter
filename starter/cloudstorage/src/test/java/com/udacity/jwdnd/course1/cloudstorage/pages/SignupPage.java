@@ -5,38 +5,40 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class SignupPage {
-    public static final String inputFirstName = "inputFirstName";
-    public static final String successMessage = "success-msg";
+import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
 
-    @FindBy(id = inputFirstName)
+public class SignupPage {
+    private final WebDriver driver;
+
+    @FindBy(id = inputFirstNameString)
     private WebElement firstNameField;
 
-    @FindBy(id = "inputLastName")
+    @FindBy(id = inputLastNameString)
     private WebElement lastNameField;
 
-    @FindBy(id = "inputUsername")
+    @FindBy(id = inputUsernameString)
     private WebElement userNameField;
 
-    @FindBy(id = "inputPassword")
+    @FindBy(id = inputPasswordString)
     private WebElement passwordField;
 
-    @FindBy(id = "submit-button")
+    @FindBy(id = submitButtonString)
     private WebElement submitButton;
 
     @FindBy(id = successMessage)
     private WebElement successMsg;
 
     public SignupPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     public void fillInfoAndSubmit(String username) {
-        firstNameField.sendKeys("T");
-        lastNameField.sendKeys("J");
-        userNameField.sendKeys(username);
-        passwordField.sendKeys("1234");
-        submitButton.click();
+        sendKey(driver, firstNameField, "T");
+        sendKey(driver, lastNameField, "J");
+        sendKey(driver, userNameField, username);
+        sendKey(driver, passwordField, "1234");
+        click(driver, submitButton);
     }
 
     public String getSuccessText() {

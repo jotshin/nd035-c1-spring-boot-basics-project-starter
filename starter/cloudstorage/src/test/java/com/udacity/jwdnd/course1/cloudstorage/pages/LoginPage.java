@@ -5,32 +5,35 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
+
 public class LoginPage {
-    public static final String signupLinkString = "signup-link";
+    private final WebDriver driver;
 
     @FindBy(id = signupLinkString)
     public WebElement signupLink;
 
-    @FindBy(id = "inputUsername")
+    @FindBy(id = inputUsernameString)
     private WebElement userNameField;
 
-    @FindBy(id = "inputPassword")
+    @FindBy(id = inputPasswordString)
     private WebElement passwordField;
 
-    @FindBy(id = "submit-button")
+    @FindBy(id = submitButtonString)
     private WebElement submitButton;
 
     public LoginPage(WebDriver driver) {
+        this.driver = driver;
         PageFactory.initElements(driver, this);
     }
 
     public void goSignup() {
-        signupLink.click();
+        click(driver, signupLink);
     }
 
     public void fillInfoAndSubmit(String username) {
-        userNameField.sendKeys(username);
-        passwordField.sendKeys("1234");
-        submitButton.click();
+        sendKey(driver, userNameField, username);
+        sendKey(driver, passwordField, "1234");
+        click(driver, submitButton);
     }
 }
