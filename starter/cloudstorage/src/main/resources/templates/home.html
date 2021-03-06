@@ -30,7 +30,7 @@
         </nav>
         <div class="tab-content" id="nav-tabContent">
             <div aria-labelledby="nav-files-tab" class="tab-pane fade show active" id="nav-files" role="tabpanel">
-                <form action="#" enctype="multipart/form-data" method="POST">
+                <form action="#" enctype="multipart/form-data" method="POST" th:action="@{/file}">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
                             <div class="col-sm-2">
@@ -54,12 +54,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:if="${#lists.isEmpty(files)}">
                             <td>
                                 <a class="btn btn-success" target="_blank">View</a>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row">ExampleFile.txt</th>
+                        </tr>
+                        <tr th:each="file: ${files}" th:unless="${#lists.isEmpty(files)}">
+                            <td>
+                                <a class="btn btn-success" target="_blank">View</a>
+                                <a class="btn btn-danger">Delete</a>
+                            </td>
+                            <th scope="row" th:text="${file}"></th>
                         </tr>
                         </tbody>
                     </table>
@@ -98,7 +105,8 @@
                                         type="button"
                                 >Edit
                                 </button>
-                                <button class="btn btn-danger" id="delete-note-button" onclick="showDeleteNoteModal(this.getAttribute('note-id'))"
+                                <button class="btn btn-danger" id="delete-note-button"
+                                        onclick="showDeleteNoteModal(this.getAttribute('note-id'))"
                                         th:note-id="${note.getNoteId()}"
                                         type="button">Delete
                                 </button>
@@ -147,7 +155,8 @@
                     </div>
                 </div>
 
-                <div aria-hidden="true" aria-labelledby="editNoteModal" class="modal fade" id="editNoteModal" role="dialog"
+                <div aria-hidden="true" aria-labelledby="editNoteModal" class="modal fade" id="editNoteModal"
+                     role="dialog"
                      tabindex="-1">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -175,7 +184,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" id="edit-note-submit-button" onclick="$('#editNoteSubmit').click();" type="button">
+                                <button class="btn btn-primary" id="edit-note-submit-button"
+                                        onclick="$('#editNoteSubmit').click();" type="button">
                                     Save changes
                                 </button>
                             </div>
@@ -184,7 +194,8 @@
                 </div>
             </div>
 
-            <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal" role="dialog"
+            <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal"
+                 role="dialog"
                  tabindex="-1">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -203,7 +214,8 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                            <button class="btn btn-primary" id="delete-note-submit-button" onclick="$('#deleteNoteSubmit').click();"
+                            <button class="btn btn-primary" id="delete-note-submit-button"
+                                    onclick="$('#deleteNoteSubmit').click();"
                                     type="button">Delete
                             </button>
                         </div>
