@@ -1,6 +1,5 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.stream.Stream;
 public class StorageService {
     private final Path rootLocation;
 
-    @Autowired
     public StorageService(StorageProperties properties) {
         this.rootLocation = Paths.get(properties.getLocation());
     }

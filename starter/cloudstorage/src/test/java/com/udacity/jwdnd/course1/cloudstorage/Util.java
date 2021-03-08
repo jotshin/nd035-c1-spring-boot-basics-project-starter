@@ -29,6 +29,9 @@ public class Util {
     // LoginPage
     public static final String signupLinkString = "signup-link";
 
+    // Result
+    public static final String successAlertString = "success-alert";
+
     public static void sendKey(WebDriver driver, WebElement webElement, String text) {
         ((JavascriptExecutor) driver).executeScript("arguments[0].value='" + text + "';", webElement);
     }

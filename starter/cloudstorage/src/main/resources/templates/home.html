@@ -55,10 +55,7 @@
                         </thead>
                         <tbody>
                         <tr th:if="${#lists.isEmpty(files)}">
-                            <td>
-                                <a class="btn btn-success" target="_blank">View</a>
-                                <a class="btn btn-danger">Delete</a>
-                            </td>
+                            <td></td>
                             <th scope="row">ExampleFile.txt</th>
                         </tr>
                         <tr th:each="file: ${files}" th:unless="${#lists.isEmpty(files)}">
@@ -90,7 +87,7 @@
                         </thead>
                         <tbody>
                         <tr th:if="${#lists.isEmpty(notes)}">
-                            <td/>
+                            <td></td>
                             <th scope="row">Example Note Title</th>
                             <td>Example Note Description</td>
                         </tr>

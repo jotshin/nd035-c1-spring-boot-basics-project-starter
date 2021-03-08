@@ -61,6 +61,8 @@ class NoteOperationTests {
         waitUntilElementClickable(noteTitleString);
         homePage.fillNoteInfoAndSubmit("test", noteAddSubmitButtonString);
 
+        checkSuccessResult();
+
         navigateToNoteTabAndCheckTitle("test", newNoteButtonString);
 
         logout();
@@ -76,6 +78,8 @@ class NoteOperationTests {
 
         waitUntilElementClickable(noteEditTitleString);
         homePage.fillNoteInfoAndSubmit("test1", noteEditSubmitButtonString);
+
+        checkSuccessResult();
 
         navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
 
@@ -93,6 +97,8 @@ class NoteOperationTests {
         WebElement noteSubmitButton = waitUntilElementClickable(noteDeleteSubmitButtonString);
         click(driver, noteSubmitButton);
 
+        checkSuccessResult();
+
         navigateToNoteTabAndCheckTitle("Example Note Title", newNoteButtonString);
 
         logout();
@@ -109,6 +115,12 @@ class NoteOperationTests {
         assertEquals(title, header.getText());
 
         return button;
+    }
+
+    private void checkSuccessResult() {
+        WebElement successLink = waitUntilElementClickable(successAlertString);
+
+        click(driver, successLink);
     }
 
     private void signup() {
