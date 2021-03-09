@@ -8,6 +8,9 @@ public class Util {
     // HomePage
     public static final String logoutButtonString = "logout-button";
     public static final String navNotesTabString = "nav-notes-tab";
+    public static final String navCredentialsTabString = "nav-credentials-tab";
+
+    // Note
     public static final String newNoteButtonString = "new-note-button";
     public static final String noteAddSubmitButtonString = "add-note-submit-button";
     public static final String noteTitleString = "note-title";
@@ -17,6 +20,15 @@ public class Util {
     public static final String noteEditSubmitButtonString = "edit-note-submit-button";
     public static final String noteDeleteButtonString = "delete-note-button";
     public static final String noteDeleteSubmitButtonString = "delete-note-submit-button";
+
+    // Credential
+    public static final String newCredentialButtonString = "new-credential-button";
+    public static final String credentialTitleString = "credentialModalLabel";
+    public static final String credentialUrlString = "credential-url";
+    public static final String credentialUsernameString = "credential-username";
+    public static final String credentialPasswordString = "credential-password";
+    public static final String credentialAddSubmitButtonString = "credentialSubmit";
+
 
     // SignupPage
     public static final String successMessage = "success-msg";

@@ -28,6 +28,18 @@ public class HomePage {
     @FindBy(id = noteEditSubmitButtonString)
     private WebElement noteEditSubmitButton;
 
+    @FindBy(id = credentialUrlString)
+    private WebElement credentialUrlField;
+
+    @FindBy(id = credentialUsernameString)
+    private WebElement credentialUsernameField;
+
+    @FindBy(id = credentialPasswordString)
+    private WebElement credentialPasswordField;
+
+    @FindBy(id = credentialAddSubmitButtonString)
+    private WebElement credentialSubmitButton;
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -37,6 +49,13 @@ public class HomePage {
         sendKey(driver, id == noteAddSubmitButtonString ? noteTitleField : noteEditTitleField, title);
         sendKey(driver, noteDescriptionField, "1234");
         click(driver, id == noteAddSubmitButtonString ? noteSubmitButton : noteEditSubmitButton);
+    }
+
+    public void fillCredentialInfoAndSubmit() {
+        sendKey(driver, credentialUrlField, "https://localhost:8080/login");
+        sendKey(driver, credentialUsernameField, "admin");
+        sendKey(driver, credentialPasswordField, "1234");
+        click(driver, credentialSubmitButton);
     }
 
     public void logout() {

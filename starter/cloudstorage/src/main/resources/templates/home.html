@@ -78,34 +78,34 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
-            <!--    Delete file    -->
+                <!--    Delete file    -->
 
-            <div aria-hidden="true" aria-labelledby="deleteFileModal" class="modal fade" id="deleteFileModal"
-                 role="dialog"
-                 tabindex="-1">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteFileModal-header">Delete a Note</h5>
-                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="#" th:action="@{/file}" th:method="DELETE">
-                                Do you want to delete file?
-                                <input id="delete-file-id" name="fileId" type="hidden">
-                                <button class="d-none" id="deleteFileSubmit" type="submit"></button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                            <button class="btn btn-primary" id="delete-file-submit-button"
-                                    onclick="$('#deleteFileSubmit').click();"
-                                    type="button">Delete
-                            </button>
+                <div aria-hidden="true" aria-labelledby="deleteFileModal" class="modal fade" id="deleteFileModal"
+                     role="dialog"
+                     tabindex="-1">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteFileModal-header">Delete a Note</h5>
+                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" th:action="@{/file}" th:method="DELETE">
+                                    Do you want to delete file?
+                                    <input id="delete-file-id" name="fileId" type="hidden">
+                                    <button class="d-none" id="deleteFileSubmit" type="submit"></button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                                <button class="btn btn-primary" id="delete-file-submit-button"
+                                        onclick="$('#deleteFileSubmit').click();"
+                                        type="button">Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -237,41 +237,42 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!--    Delete note    -->
+                <!--    Delete note    -->
 
-            <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal"
-                 role="dialog"
-                 tabindex="-1">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
-                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="#" th:action="@{/note}" th:method="DELETE">
-                                Do you want to delete note?
-                                <input id="delete-note-id" name="noteId" type="hidden">
-                                <button class="d-none" id="deleteNoteSubmit" type="submit"></button>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                            <button class="btn btn-primary" id="delete-note-submit-button"
-                                    onclick="$('#deleteNoteSubmit').click();"
-                                    type="button">Delete
-                            </button>
+                <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal"
+                     role="dialog"
+                     tabindex="-1">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
+                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="#" th:action="@{/note}" th:method="DELETE">
+                                    Do you want to delete note?
+                                    <input id="delete-note-id" name="noteId" type="hidden">
+                                    <button class="d-none" id="deleteNoteSubmit" type="submit"></button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                                <button class="btn btn-primary" id="delete-note-submit-button"
+                                        onclick="$('#deleteNoteSubmit').click();"
+                                        type="button">Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div aria-labelledby="nav-credentials-tab" class="tab-pane fade" id="nav-credentials" role="tabpanel">
-                <button class="btn btn-info float-right" onclick="showCredentialModal()" style="margin: 0.25em;"
+                <button class="btn btn-info float-right" id="new-credential-button" onclick="showCredentialModal()"
+                        style="margin: 0.25em;"
                         type="button">
                     + Add a New Credential
                 </button>
