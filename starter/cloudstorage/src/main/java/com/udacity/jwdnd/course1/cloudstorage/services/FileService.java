@@ -20,6 +20,10 @@ public class FileService {
         this.userMapper = userMapper;
     }
 
+    public File getFile(Integer fileId) {
+        return fileMapper.getFile(fileId);
+    }
+
     public List<File> getAllFiles(String username) {
         User user = userMapper.getUser(username);
         return this.fileMapper.getFiles(user.getUserId());
