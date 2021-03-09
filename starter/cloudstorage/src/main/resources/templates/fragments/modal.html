@@ -1,0 +1,38 @@
+<div aria-hidden="true" aria-labelledby="noteModalLabel" class="modal fade" id="noteModel"
+     role="dialog"
+     tabindex="-1" th:fragment="modal" xmlns:th="https://www.thymeleaf.org">
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noteModalLabel">Note</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="#" id="note-form" th:action="@{/note}" th:method="POST">
+                    <input id="note-id" name="noteId" type="hidden">
+                    <div class="form-group">
+                        <label class="col-form-label" for="note-title">Title</label>
+                        <input class="form-control" id="note-title" maxlength="20" name="noteTitle"
+                               required type="text">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="note-description">Description</label>
+                        <textarea class="form-control" id="note-description" maxlength="1000"
+                                  name="noteDescription" required rows="5"></textarea>
+                    </div>
+                    <button class="d-none" id="noteSubmit" type="submit"></button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                <button class="btn btn-primary" id="add-note-submit-button"
+                        onclick="$('#noteSubmit').click();" type="button">Save
+                    changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

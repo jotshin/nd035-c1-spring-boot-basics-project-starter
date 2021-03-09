@@ -45,10 +45,10 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void fillNoteInfoAndSubmit(String title, String id) {
-        sendKey(driver, id == noteAddSubmitButtonString ? noteTitleField : noteEditTitleField, title);
+    public void fillNoteInfoAndSubmit(String title) {
+        sendKey(driver, noteTitleField, title);
         sendKey(driver, noteDescriptionField, "1234");
-        click(driver, id == noteAddSubmitButtonString ? noteSubmitButton : noteEditSubmitButton);
+        click(driver, noteSubmitButton);
     }
 
     public void fillCredentialInfoAndSubmit() {

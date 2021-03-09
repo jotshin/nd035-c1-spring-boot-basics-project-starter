@@ -137,7 +137,7 @@
                         </tr>
                         <tr th:each="note: ${notes}" th:unless="${#lists.isEmpty(notes)}">
                             <td>
-                                <button class="btn btn-success" id="edit-note-button" onclick="showEditNoteModal(this.getAttribute('note-id'),
+                                <button class="btn btn-success" id="edit-note-button" onclick="showNoteModal(this.getAttribute('note-id'),
                                                     this.getAttribute('note-title'),
                                                     this.getAttribute('note-description'))"
                                         th:note-description="${note.getNoteDescription()}"
@@ -159,84 +159,9 @@
                     </table>
                 </div>
 
-                <!--    Add note    -->
-
-                <div aria-hidden="true" aria-labelledby="noteModalLabel" class="modal fade" id="noteModal" role="dialog"
-                     tabindex="-1">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="noteModalLabel">Note</h5>
-                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" method="POST" th:action="@{/note}">
-                                    <input id="note-id" name="noteId" type="hidden">
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="note-title">Title</label>
-                                        <input class="form-control" id="note-title" maxlength="20" name="noteTitle"
-                                               required type="text">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="note-description">Description</label>
-                                        <textarea class="form-control" id="note-description" maxlength="1000"
-                                                  name="noteDescription" required rows="5"></textarea>
-                                    </div>
-                                    <button class="d-none" id="noteSubmit" type="submit"></button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" id="add-note-submit-button"
-                                        onclick="$('#noteSubmit').click();" type="button">Save
-                                    changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!--    Edit note    -->
 
-                <div aria-hidden="true" aria-labelledby="editNoteModal" class="modal fade" id="editNoteModal"
-                     role="dialog"
-                     tabindex="-1">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editNoteModal-header">Edit a Note</h5>
-                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{/note}" th:method="PUT">
-                                    <input id="edit-note-id" name="noteId" type="hidden">
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="edit-note-title">Title</label>
-                                        <input class="form-control" id="edit-note-title" maxlength="20" name="noteTitle"
-                                               required type="text">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="edit-note-description">Description</label>
-                                        <textarea class="form-control" id="edit-note-description" maxlength="1000"
-                                                  name="noteDescription" required rows="5"></textarea>
-                                    </div>
-                                    <button class="d-none" id="editNoteSubmit" type="submit"></button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" id="edit-note-submit-button"
-                                        onclick="$('#editNoteSubmit').click();" type="button">
-                                    Save changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div th:remove="tag" th:replace="fragments/modal :: modal"></div>
 
                 <!--    Delete note    -->
 
@@ -317,18 +242,18 @@
                                 <form action="#" method="POST">
                                     <input id="credential-id" name="credentialId" type="hidden">
                                     <div class="form-group">
-                                        <label class="col-form-label" for="note-title">URL</label>
+                                        <label class="col-form-label" for="credential-url">URL</label>
                                         <input class="form-control" id="credential-url" maxlength="100" name="url"
                                                required type="text">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label" for="note-title">Username</label>
+                                        <label class="col-form-label" for="credential-username">Username</label>
                                         <input class="form-control" id="credential-username" maxlength="30"
                                                name="username"
                                                required type="text">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label" for="note-title">Password</label>
+                                        <label class="col-form-label" for="credential-password">Password</label>
                                         <input class="form-control" id="credential-password" maxlength="30"
                                                name="password"
                                                required type="text">
@@ -358,19 +283,20 @@
 <script type="text/javascript">
     // For opening the note modal
     function showNoteModal(noteId, noteTitle, noteDescription) {
-        console.log('i m in show note modal');
         $('#note-id').val(noteId ? noteId : '');
         $('#note-title').val(noteTitle ? noteTitle : '');
         $('#note-description').val(noteDescription ? noteDescription : '');
-        $('#noteModal').modal('show');
+        // TODO: won't work
+        $('#note-form').attr('th:method', noteId ? 'POST' : 'PUT');
+        $('#noteModel').modal('show');
     }
 
-    function showEditNoteModal(noteId, noteTitle, noteDescription) {
-        $('#edit-note-id').val(noteId ? noteId : '');
-        $('#edit-note-title').val(noteTitle ? noteTitle : '');
-        $('#edit-note-description').val(noteDescription ? noteDescription : '');
-        $('#editNoteModal').modal('show');
-    }
+    // function showEditNoteModal(noteId, noteTitle, noteDescription) {
+    //     $('#edit-note-id').val(noteId ? noteId : '');
+    //     $('#edit-note-title').val(noteTitle ? noteTitle : '');
+    //     $('#edit-note-description').val(noteDescription ? noteDescription : '');
+    //     $('#editNoteModal').modal('show');
+    // }
 
     function showDeleteNoteModal(noteId) {
         $('#delete-note-id').val(noteId ? noteId : '');

@@ -59,7 +59,7 @@ class NoteOperationTests {
         Util.click(driver, newNoteButton);
 
         waitUntilElementClickable(noteTitleString);
-        homePage.fillNoteInfoAndSubmit("test", noteAddSubmitButtonString);
+        homePage.fillNoteInfoAndSubmit("test");
 
         checkSuccessResult();
 
@@ -74,14 +74,25 @@ class NoteOperationTests {
 
         WebElement editButton = navigateToNoteTabAndCheckTitle("test", noteEditButtonString);
 
-        click(driver, editButton);
+        Util.click(driver, editButton);
 
-        waitUntilElementClickable(noteEditTitleString);
-        homePage.fillNoteInfoAndSubmit("test1", noteEditSubmitButtonString);
+        waitUntilElementClickable(noteTitleString);
+        homePage.fillNoteInfoAndSubmit("test1");
 
         checkSuccessResult();
 
         navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
+
+//        WebElement editButton = navigateToNoteTabAndCheckTitle("test", noteEditButtonString);
+//
+//        click(driver, editButton);
+//
+//        waitUntilElementClickable(noteEditTitleString);
+//        homePage.fillNoteInfoAndSubmit("test1", noteEditSubmitButtonString);
+//
+//        checkSuccessResult();
+//
+//        navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
 
         logout();
     }
