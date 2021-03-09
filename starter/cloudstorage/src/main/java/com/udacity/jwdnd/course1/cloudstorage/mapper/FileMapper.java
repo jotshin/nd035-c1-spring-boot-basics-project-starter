@@ -8,11 +8,14 @@ import java.util.List;
 
 @Mapper
 public interface FileMapper {
-    @Select("SELECT * FROM FILES WHERE userId = #{userId}")
+    @Select("SELECT * FROM FILES WHERE userid = #{userId}")
     List<File> getFiles(Integer userId);
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")
     File getFile(Integer fileId);
+
+    @Select("SELECT * FROM FILES WHERE userid = #{userId} AND filename = #{fileName}")
+    List<File> getDuplicatedFiles(Integer userId, String fileName);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata) " +
             "VALUES (#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")

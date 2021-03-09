@@ -40,6 +40,14 @@ public class FileController {
             errorMsg = "File should not be empty!";
         }
 
+        if (file.getSize() > 1_048_576) {
+            errorMsg = "File should not exceed 1MB!";
+        }
+
+        if (!fileService.isFileNameAvailable(principal.getName(), file.getOriginalFilename())) {
+            errorMsg = "There shouldn't be duplicated files";
+        }
+
         if (errorMsg == null) {
             // TODO: handle exception
             Integer currentFileId = this.fileService.uploadFile(file, principal.getName());

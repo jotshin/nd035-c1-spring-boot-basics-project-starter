@@ -19,6 +19,11 @@ public class FileService {
         this.userService = userService;
     }
 
+    public boolean isFileNameAvailable(String username, String fileName) {
+        User user = userService.getUser(username);
+        return fileMapper.getDuplicatedFiles(user.getUserId(), fileName).isEmpty();
+    }
+
     public File getFile(Integer fileId) {
         return fileMapper.getFile(fileId);
     }
