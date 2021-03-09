@@ -1,7 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
-import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
@@ -13,11 +12,11 @@ import java.util.List;
 @Service
 public class FileService {
     private FileMapper fileMapper;
-    private UserMapper userMapper;
+    private UserService userService;
 
-    public FileService(FileMapper fileMapper, UserMapper userMapper) {
+    public FileService(FileMapper fileMapper, UserService userService) {
         this.fileMapper = fileMapper;
-        this.userMapper = userMapper;
+        this.userService = userService;
     }
 
     public File getFile(Integer fileId) {
@@ -25,12 +24,12 @@ public class FileService {
     }
 
     public List<File> getAllFiles(String username) {
-        User user = userMapper.getUser(username);
+        User user = userService.getUser(username);
         return this.fileMapper.getFiles(user.getUserId());
     }
 
     public Integer uploadFile(MultipartFile mFile, String username) throws IOException {
-        User user = userMapper.getUser(username);
+        User user = userService.getUser(username);
         File file = new File(null, mFile.getOriginalFilename(),
                 mFile.getContentType(), mFile.getSize(), user.getUserId(), mFile.getBytes());
 
