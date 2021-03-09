@@ -33,14 +33,16 @@
 
         <div class="tab-content" id="nav-tabContent">
             <div aria-labelledby="nav-files-tab" class="tab-pane fade show active" id="nav-files" role="tabpanel">
-                <form action="#" enctype="multipart/form-data" method="POST" th:action="@{/file}" th:object="${fileDTO}">
+                <form action="#" enctype="multipart/form-data" method="POST" th:action="@{/file}"
+                      th:object="${fileDTO}">
                     <div class="container">
                         <div class="row" style="margin: 1em;">
                             <div class="col-sm-2">
                                 <label for="fileUpload">Upload a New File:</label>
                             </div>
                             <div class="col-sm-6">
-                                <input class="form-control-file" id="fileUpload" name="fileUpload" type="file" th:field="*{file}">
+                                <input class="form-control-file" id="fileUpload" name="fileUpload" th:field="*{file}"
+                                       type="file">
                             </div>
                             <div class="col-sm-4">
                                 <button class="btn btn-dark" type="submit">Upload</button>
@@ -65,7 +67,11 @@
                         <tr th:each="file: ${files}" th:unless="${#lists.isEmpty(files)}">
                             <td>
                                 <a class="btn btn-success" target="_blank" th:href="@{'/file/' + ${file.getFileId()}}">View</a>
-                                <a class="btn btn-danger">Delete</a>
+                                <button class="btn btn-danger"
+                                        onclick="showDeleteFileModal(this.getAttribute('file-id'))"
+                                        th:file-id="${file.getFileId()}"
+                                        type="button">Delete
+                                </button>
                             </td>
                             <th scope="row" th:text="${file.getFileName()}"></th>
                         </tr>
@@ -74,6 +80,36 @@
                 </div>
             </div>
 
+            <!--    Delete file    -->
+
+            <div aria-hidden="true" aria-labelledby="deleteFileModal" class="modal fade" id="deleteFileModal"
+                 role="dialog"
+                 tabindex="-1">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteFileModal-header">Delete a Note</h5>
+                            <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="#" th:action="@{/file}" th:method="DELETE">
+                                Do you want to delete file?
+                                <input id="delete-file-id" name="fileId" type="hidden">
+                                <button class="d-none" id="deleteFileSubmit" type="submit"></button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+                            <button class="btn btn-primary" id="delete-file-submit-button"
+                                    onclick="$('#deleteFileSubmit').click();"
+                                    type="button">Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!--    Note list    -->
 
@@ -338,6 +374,11 @@
     function showDeleteNoteModal(noteId) {
         $('#delete-note-id').val(noteId ? noteId : '');
         $('#deleteNoteModal').modal('show');
+    }
+
+    function showDeleteFileModal(fileId) {
+        $('#delete-file-id').val(fileId ? fileId : '');
+        $('#deleteFileModal').modal('show');
     }
 
     // For opening the credentials modal

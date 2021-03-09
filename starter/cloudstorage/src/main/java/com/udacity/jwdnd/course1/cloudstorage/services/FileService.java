@@ -35,4 +35,10 @@ public class FileService {
 
         return this.fileMapper.uploadFile(file);
     }
+
+    public Integer deleteFile(File file, String username) {
+        User user = userService.getUser(username);
+        file.setUserId(user.getUserId());
+        return fileMapper.deleteFile(file.getFileId());
+    }
 }

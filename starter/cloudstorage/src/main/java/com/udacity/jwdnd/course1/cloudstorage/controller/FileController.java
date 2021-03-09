@@ -56,4 +56,18 @@ public class FileController {
 
         return "result";
     }
+
+    @DeleteMapping
+    public String deleteFile(@ModelAttribute File file, Principal principal, Model model) {
+
+        Integer fileDeleted = fileService.deleteFile(file, principal.getName());
+
+        if (fileDeleted > 0) {
+            model.addAttribute("updateSuccess", true);
+        } else {
+            model.addAttribute("updateFail", "There was error deleting the note!");
+        }
+
+        return "result";
+    }
 }
