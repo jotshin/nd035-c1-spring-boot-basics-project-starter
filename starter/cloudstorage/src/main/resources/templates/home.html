@@ -195,6 +195,8 @@
                 </div>
             </div>
 
+            <!--    Credential  -->
+
             <div aria-labelledby="nav-credentials-tab" class="tab-pane fade" id="nav-credentials" role="tabpanel">
                 <button class="btn btn-info float-right" id="new-credential-button" onclick="showCredentialModal()"
                         style="margin: 0.25em;"
@@ -213,14 +215,20 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:if="${#lists.isEmpty(credentials)}">
+                            <td></td>
+                            <th scope="row">Example Credential URL</th>
+                            <td>Example Credential Username</td>
+                            <td>Example Credential Password</td>
+                        </tr>
+                        <tr th:each="credential: ${credentials}" th:unless="${#lists.isEmpty(credentials)}">
                             <td>
                                 <button class="btn btn-success" type="button">Edit</button>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row">Example Credential URL</th>
-                            <td>Example Credential Username</td>
-                            <td>Example Credential Password</td>
+                            <td th:text="${credential.getUsername()}"></td>
+                            <td th:text="${credential.getPassword()}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -239,7 +247,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
+                                <form action="#" th:action="@{/credential}" th:method="POST">
                                     <input id="credential-id" name="credentialId" type="hidden">
                                     <div class="form-group">
                                         <label class="col-form-label" for="credential-url">URL</label>

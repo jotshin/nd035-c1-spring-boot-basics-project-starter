@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.dto.FileDTO;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import org.springframework.http.ResponseEntity;
@@ -19,16 +20,20 @@ import java.security.Principal;
 public class HomeController {
     private final NoteService noteService;
     private final FileService fileService;
+    private final CredentialService credentialService;
 
-    public HomeController(NoteService noteService, FileService fileService) {
+    public HomeController(NoteService noteService, FileService fileService, CredentialService credentialService) {
         this.noteService = noteService;
         this.fileService = fileService;
+        this.credentialService = credentialService;
     }
 
     @GetMapping()
     public String getHomeView(Model model, Principal principal) throws IOException {
-        model.addAttribute("notes", noteService.getAllNotes(principal.getName()));
-        model.addAttribute("files", fileService.getAllFiles(principal.getName()));
+        String username = principal.getName();
+        model.addAttribute("notes", noteService.getAllNotes(username));
+        model.addAttribute("files", fileService.getAllFiles(username));
+        model.addAttribute("credentials", credentialService.getAllCredentials(username));
         return "home";
     }
 

@@ -77,7 +77,7 @@ class CredentialOperationTests {
         WebElement button = waitUntilElementClickable(buttonId);
         assertNotNull(button);
 
-        WebElement header = driver.findElement(By.cssSelector("#userTable > tbody > tr > th"));
+        WebElement header = driver.findElement(By.cssSelector("#credentialTable > tbody > tr > td:nth-child(3)"));
         assertEquals(username, header.getText());
 
         return button;
