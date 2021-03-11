@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
-import static com.udacity.jwdnd.course1.cloudstorage.Util.signupLinkString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -56,7 +55,7 @@ class CredentialOperationTests {
 
         login();
 
-        WebElement newCredentialButton = navigateToCredentialTabAndCheckUsername("Example Credential Username", newCredentialButtonString);
+        WebElement newCredentialButton = navigateToCredentialTabAndCheckUsername("Example Credential URL", "Example Credential Username", newCredentialButtonString);
 
         Util.click(driver, newCredentialButton);
 
@@ -65,12 +64,12 @@ class CredentialOperationTests {
 
         checkSuccessResult();
 
-        navigateToCredentialTabAndCheckUsername("admin", newCredentialButtonString);
+        navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin", newCredentialButtonString);
 
         logout();
     }
 
-    private WebElement navigateToCredentialTabAndCheckUsername(String username, String buttonId) {
+    private WebElement navigateToCredentialTabAndCheckUsername(String url, String username, String buttonId) {
         WebElement navNotesTab = waitUntilElementClickable(navCredentialsTabString);
         click(driver, navNotesTab);
 

@@ -29,16 +29,19 @@ public class CredentialService {
     public Integer createCredential(Credential credential, String username) {
         User user = userService.getUser(username);
         credential.setUserId(user.getUserId());
-        credential.setPassword(encryptedPassword(credential.getPassword()));
+        credential.setKey(encodedKey());
+        credential.setPassword(encryptedPassword(credential.getPassword(), credential.getKey()));
         return credentialMapper.insert(credential);
     }
 
-    private String encryptedPassword(String password) {
+    private String encryptedPassword(String password, String encodedKey) {
+        return encryptionService.encryptValue(password, encodedKey);
+    }
+
+    private String encodedKey() {
         SecureRandom random = new SecureRandom();
         byte[] key = new byte[16];
         random.nextBytes(key);
-        String encodedKey = Base64.getEncoder().encodeToString(key);
-        String encryptedPassword = encryptionService.encryptValue(password, encodedKey);
-        return encryptionService.decryptValue(encryptedPassword, encodedKey);
+        return Base64.getEncoder().encodeToString(key);
     }
 }
