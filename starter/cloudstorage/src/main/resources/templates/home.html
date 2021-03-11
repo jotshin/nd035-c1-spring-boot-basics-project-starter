@@ -114,7 +114,7 @@
             <!--    Note list    -->
 
             <div aria-labelledby="nav-notes-tab" class="tab-pane fade" id="nav-notes" role="tabpanel">
-                <button class="btn btn-info float-right" id="new-note-button" onclick="showNoteModal()"
+                <button class="btn btn-info float-right" id="new-note-button" onclick="showNoteModal(false)"
                         style="margin: 0.25em;"
                         type="button">
                     + Add a New Note
@@ -137,7 +137,7 @@
                         </tr>
                         <tr th:each="note: ${notes}" th:unless="${#lists.isEmpty(notes)}">
                             <td>
-                                <button class="btn btn-success" id="edit-note-button" onclick="showNoteModal(this.getAttribute('note-id'),
+                                <button class="btn btn-success" id="edit-note-button" onclick="showNoteModal(false, this.getAttribute('note-id'),
                                                     this.getAttribute('note-title'),
                                                     this.getAttribute('note-description'))"
                                         th:note-description="${note.getNoteDescription()}"
@@ -147,7 +147,7 @@
                                 >Edit
                                 </button>
                                 <button class="btn btn-danger" id="delete-note-button"
-                                        onclick="showDeleteNoteModal(this.getAttribute('note-id'))"
+                                        onclick="showNoteModal(true, this.getAttribute('note-id'))"
                                         th:note-id="${note.getNoteId()}"
                                         type="button">Delete
                                 </button>
@@ -159,40 +159,9 @@
                     </table>
                 </div>
 
-                <!--    Edit note    -->
+                <!--    Add / Edit / edit note    -->
 
                 <div th:remove="tag" th:replace="fragments/modal :: modal"></div>
-
-                <!--    Delete note    -->
-
-                <div aria-hidden="true" aria-labelledby="deleteNoteModal" class="modal fade" id="deleteNoteModal"
-                     role="dialog"
-                     tabindex="-1">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteNoteModal-header">Delete a Note</h5>
-                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{/note}" th:method="DELETE">
-                                    Do you want to delete note?
-                                    <input id="delete-note-id" name="noteId" type="hidden">
-                                    <button class="d-none" id="deleteNoteSubmit" type="submit"></button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" id="delete-note-submit-button"
-                                        onclick="$('#deleteNoteSubmit').click();"
-                                        type="button">Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <!--    Credential  -->
@@ -290,25 +259,25 @@
 <!--For opening the note modal-->
 <script type="text/javascript">
     // For opening the note modal
-    function showNoteModal(noteId, noteTitle, noteDescription) {
+    function showNoteModal(isDeleteMethod, noteId, noteTitle, noteDescription) {
+        if (noteId && !isDeleteMethod) {
+            $('#note-form').prepend("<Input type='hidden' name='_method' value='PUT'>");
+        }
+
+        if (isDeleteMethod) {
+            $('#note-form-div').hide();
+            $('#delete-form-div').show();
+            $('#noteSubmit').attr('id', 'oldNoteSubmit');
+            $('#deleteNoteSubmit').attr('id', 'noteSubmit');
+            $('#note-id').attr('id', 'old-note-id');
+            $('#delete-note-id').attr('id', 'note-id');
+        }
+
         $('#note-id').val(noteId ? noteId : '');
         $('#note-title').val(noteTitle ? noteTitle : '');
         $('#note-description').val(noteDescription ? noteDescription : '');
-        // TODO: won't work
-        $('#note-form').attr('th:method', noteId ? 'POST' : 'PUT');
+
         $('#noteModel').modal('show');
-    }
-
-    // function showEditNoteModal(noteId, noteTitle, noteDescription) {
-    //     $('#edit-note-id').val(noteId ? noteId : '');
-    //     $('#edit-note-title').val(noteTitle ? noteTitle : '');
-    //     $('#edit-note-description').val(noteDescription ? noteDescription : '');
-    //     $('#editNoteModal').modal('show');
-    // }
-
-    function showDeleteNoteModal(noteId) {
-        $('#delete-note-id').val(noteId ? noteId : '');
-        $('#deleteNoteModal').modal('show');
     }
 
     function showDeleteFileModal(fileId) {

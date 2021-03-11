@@ -25,9 +25,6 @@ public class HomePage {
     @FindBy(id = noteAddSubmitButtonString)
     private WebElement noteSubmitButton;
 
-    @FindBy(id = noteEditSubmitButtonString)
-    private WebElement noteEditSubmitButton;
-
     @FindBy(id = credentialUrlString)
     private WebElement credentialUrlField;
 
@@ -56,9 +53,5 @@ public class HomePage {
         sendKey(driver, credentialUsernameField, "admin");
         sendKey(driver, credentialPasswordField, "1234");
         click(driver, credentialSubmitButton);
-    }
-
-    public void logout() {
-        click(driver, logoutButton);
     }
 }

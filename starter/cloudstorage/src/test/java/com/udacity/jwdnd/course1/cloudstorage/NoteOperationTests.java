@@ -83,17 +83,6 @@ class NoteOperationTests {
 
         navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
 
-//        WebElement editButton = navigateToNoteTabAndCheckTitle("test", noteEditButtonString);
-//
-//        click(driver, editButton);
-//
-//        waitUntilElementClickable(noteEditTitleString);
-//        homePage.fillNoteInfoAndSubmit("test1", noteEditSubmitButtonString);
-//
-//        checkSuccessResult();
-//
-//        navigateToNoteTabAndCheckTitle("test1", noteEditButtonString);
-
         logout();
     }
 
@@ -105,7 +94,7 @@ class NoteOperationTests {
 
         click(driver, deleteButton);
 
-        WebElement noteSubmitButton = waitUntilElementClickable(noteDeleteSubmitButtonString);
+        WebElement noteSubmitButton = waitUntilElementClickable(noteAddSubmitButtonString);
         click(driver, noteSubmitButton);
 
         checkSuccessResult();
