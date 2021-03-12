@@ -139,14 +139,15 @@
                         </tr>
                         <tr th:each="note: ${notes}" th:unless="${#lists.isEmpty(notes)}">
                             <td>
-                                <button class="btn btn-success" id="edit-note-button" onclick="showNoteModal(false, this.getAttribute('note-id'),
-                                                    this.getAttribute('note-title'),
-                                                    this.getAttribute('note-description'))"
+                                <button class="btn btn-success" id="edit-note-button"
+                                        onclick="showNoteModal(false,
+                                    this.getAttribute('note-id'),
+                                    this.getAttribute('note-title'),
+                                    this.getAttribute('note-description'))"
                                         th:note-description="${note.getNoteDescription()}"
                                         th:note-id="${note.getNoteId()}"
                                         th:note-title="${note.getNoteTitle()}"
-                                        type="button"
-                                >Edit
+                                        type="button">Edit
                                 </button>
                                 <button class="btn btn-danger" id="delete-note-button"
                                         onclick="showNoteModal(true, this.getAttribute('note-id'))"
@@ -163,20 +164,20 @@
 
                 <!--    Add / Edit / edit note    -->
 
-                <div th:remove="tag" th:replace="fragments/modal :: modal"></div>
+                <div th:remove="tag" th:replace="fragments/note-modal :: modal"></div>
             </div>
 
             <!--    Credential  -->
 
             <div aria-labelledby="nav-credentials-tab" class="tab-pane fade" id="nav-credentials" role="tabpanel">
-                <button class="btn btn-info float-right" id="new-credential-button" onclick="showCredentialModal()"
+                <button class="btn btn-info float-right" id="new-credential-button" onclick="showCredentialModal(false)"
                         style="margin: 0.25em;"
                         type="button">
                     + Add a New Credential
                 </button>
 
                 <div class="table-responsive">
-                    <table class="table table-striped" id="credentialTable" th:object="${credentials}">
+                    <table class="table table-striped" id="credentialTable">
                         <thead>
                         <tr>
                             <th scope="col" style="width: 20%"></th>
@@ -194,7 +195,9 @@
                         </tr>
                         <tr th:each="credential: ${credentials}" th:unless="${#lists.isEmpty(credentials)}">
                             <td>
-                                <button class="btn btn-success" type="button">Edit</button>
+                                <button class="btn btn-success" id="update-credential-button"
+                                        onclick="showUpdateCredentialModal(this.getAttribute('credential-id'))"
+                                        th:credential-id="${credential.getCredentialId()}" type="button">Edit</button>
                                 <a class="btn btn-danger">Delete</a>
                             </td>
                             <th scope="row" th:text="${credential.getUrl()}"></th>
@@ -205,56 +208,15 @@
                     </table>
                 </div>
 
-                <!--    Credential list    -->
+                <!--    Add / Edit / edit credential    -->
 
-                <div aria-hidden="true" aria-labelledby="credentialModalLabel" class="modal fade" id="credentialModal"
-                     role="dialog" tabindex="-1">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="credentialModalLabel">Credential</h5>
-                                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" th:action="@{/credential}" th:method="POST">
-                                    <input id="credential-id" name="credentialId" type="hidden">
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="credential-url">URL</label>
-                                        <input class="form-control" id="credential-url" maxlength="100" name="url"
-                                               required type="text">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="credential-username">Username</label>
-                                        <input class="form-control" id="credential-username" maxlength="30"
-                                               name="username"
-                                               required type="text">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-form-label" for="credential-password">Password</label>
-                                        <input class="form-control" id="credential-password" maxlength="30"
-                                               name="password"
-                                               required type="text">
-                                    </div>
-                                    <button class="d-none" id="credentialSubmit" type="submit"></button>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
-                                <button class="btn btn-primary" onclick="$('#credentialSubmit').click();" type="button">
-                                    Save changes
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div th:remove="tag" th:replace="fragments/credential-modal :: modal"></div>
             </div>
         </div>
     </div>
 </div>
 
-<script th:src="@{/js/jquery-slim.min.js}"></script>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/popper.min.js}"></script>
 <script th:src="@{/js/bootstrap.min.js}"></script>
 

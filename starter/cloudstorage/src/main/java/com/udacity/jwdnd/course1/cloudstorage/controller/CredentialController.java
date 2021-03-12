@@ -1,12 +1,14 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -17,6 +19,16 @@ public class CredentialController {
 
     public CredentialController(CredentialService credentialService) {
         this.credentialService = credentialService;
+    }
+
+    @GetMapping("{credentialId}")
+    @ResponseBody
+    public ResponseEntity<Credential> getCredential(@PathVariable(name = "credentialId") Integer credentialId) {
+        try {
+            return new ResponseEntity<>(credentialService.getCredential(credentialId), HttpStatus.OK);
+        } catch(Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
@@ -47,6 +59,19 @@ public class CredentialController {
             model.addAttribute("updateSuccess", true);
         } else {
             model.addAttribute("updateFail", errorMsg);
+        }
+
+        return "result";
+    }
+
+    @PutMapping
+    public String updateCredential(@ModelAttribute Credential credential, Model model) {
+        Integer credentialChanged = credentialService.updateCredential(credential);
+
+        if (credentialChanged > 0) {
+            model.addAttribute("updateSuccess", true);
+        } else {
+            model.addAttribute("updateFail", "There was error updating the note!");
         }
 
         return "result";

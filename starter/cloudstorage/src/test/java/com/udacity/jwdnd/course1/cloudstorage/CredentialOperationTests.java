@@ -60,11 +60,29 @@ class CredentialOperationTests {
         Util.click(driver, newCredentialButton);
 
         waitUntilElementClickable(credentialTitleString);
-        homePage.fillCredentialInfoAndSubmit();
+        homePage.fillCredentialInfoAndSubmit("admin");
 
         checkSuccessResult();
 
         navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin", newCredentialButtonString);
+
+        logout();
+    }
+
+    @Test
+    public void testUpdateCredential() {
+        login();
+
+        WebElement updateCredentialButton = navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin", updateCredentialButtonString);
+
+        Util.click(driver, updateCredentialButton);
+
+        waitUntilElementClickable(credentialTitleString);
+        homePage.fillCredentialInfoAndSubmit("admin1");
+
+        checkSuccessResult();
+
+        navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin1", updateCredentialButtonString);
 
         logout();
     }

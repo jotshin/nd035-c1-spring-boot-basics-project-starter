@@ -5,7 +5,7 @@ function showNoteModal(isDeleteMethod, noteId, noteTitle, noteDescription) {
 
     if (isDeleteMethod) {
         $('#note-form-div').hide();
-        $('#delete-form-div').show();
+        $('#delete-note-form-div').show();
         $('#noteSubmit').attr('id', 'oldNoteSubmit');
         $('#deleteNoteSubmit').attr('id', 'noteSubmit');
         $('#note-id').attr('id', 'old-note-id');
@@ -25,10 +25,21 @@ function showDeleteFileModal(fileId) {
 }
 
 // For opening the credentials modal
-function showCredentialModal(credentialId, url, username, password) {
+function showCredentialModal(isDeleteMethod, credentialId, url, username, password) {
+    if (credentialId && !isDeleteMethod) {
+        $('#credential-form').prepend("<Input type='hidden' name='_method' value='PUT'>");
+    }
     $('#credential-id').val(credentialId ? credentialId : '');
     $('#credential-url').val(url ? url : '');
     $('#credential-username').val(username ? username : '');
     $('#credential-password').val(password ? password : '');
     $('#credentialModal').modal('show');
+}
+
+function showUpdateCredentialModal(credentialId) {
+    $.ajax({
+        url: "/credential/" + credentialId
+    }).then(function (data) {
+        showCredentialModal(false, data.credentialId, data.url, data.username, data.password);
+    });
 }

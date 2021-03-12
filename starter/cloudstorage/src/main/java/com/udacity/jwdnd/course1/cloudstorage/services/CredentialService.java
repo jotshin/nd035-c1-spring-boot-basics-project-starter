@@ -21,6 +21,12 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
+    public Credential getCredential(Integer credentialId) {
+        Credential credential = credentialMapper.getCredential(credentialId);
+        credential.setPassword(encryptionService.decryptValue(credential.getPassword(), credential.getKey()));
+        return credential;
+    }
+
     public List<Credential> getAllCredentials(String username) {
         User user = userService.getUser(username);
         return credentialMapper.getCredentials(user.getUserId());
@@ -32,6 +38,12 @@ public class CredentialService {
         credential.setKey(encodedKey());
         credential.setPassword(encryptedPassword(credential.getPassword(), credential.getKey()));
         return credentialMapper.insert(credential);
+    }
+
+    public Integer updateCredential(Credential credential) {
+        credential.setKey(encodedKey());
+        credential.setPassword(encryptedPassword(credential.getPassword(), credential.getKey()));
+        return credentialMapper.updateCredential(credential);
     }
 
     private String encryptedPassword(String password, String encodedKey) {

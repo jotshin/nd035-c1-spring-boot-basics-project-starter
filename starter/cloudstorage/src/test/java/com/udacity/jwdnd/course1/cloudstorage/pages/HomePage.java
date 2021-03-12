@@ -48,9 +48,9 @@ public class HomePage {
         click(driver, noteSubmitButton);
     }
 
-    public void fillCredentialInfoAndSubmit() {
+    public void fillCredentialInfoAndSubmit(String username) {
         sendKey(driver, credentialUrlField, "https://localhost:8080/login");
-        sendKey(driver, credentialUsernameField, "admin");
+        sendKey(driver, credentialUsernameField, username);
         sendKey(driver, credentialPasswordField, "1234");
         click(driver, credentialSubmitButton);
     }
