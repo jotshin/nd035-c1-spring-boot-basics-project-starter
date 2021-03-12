@@ -29,6 +29,16 @@ function showCredentialModal(isDeleteMethod, credentialId, url, username, passwo
     if (credentialId && !isDeleteMethod) {
         $('#credential-form').prepend("<Input type='hidden' name='_method' value='PUT'>");
     }
+
+    if (isDeleteMethod) {
+        $('#credential-form-div').hide();
+        $('#delete-credential-form-div').show();
+        $('#credentialSubmit').attr('id', 'oldCredentialSubmit');
+        $('#deleteCredentialSubmit').attr('id', 'credentialSubmit');
+        $('#credential-id').attr('id', 'old-credential-id');
+        $('#delete-credential-id').attr('id', 'credential-id');
+    }
+
     $('#credential-id').val(credentialId ? credentialId : '');
     $('#credential-url').val(url ? url : '');
     $('#credential-username').val(username ? username : '');

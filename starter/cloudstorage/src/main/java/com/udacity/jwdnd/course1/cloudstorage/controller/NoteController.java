@@ -44,9 +44,9 @@ public class NoteController {
     }
 
     @DeleteMapping
-    public String deleteNote(@ModelAttribute Note note, Principal principal, Model model) {
+    public String deleteNote(@ModelAttribute Note note, Model model) {
 
-        Integer noteDeleted = noteService.deleteNote(note, principal.getName());
+        Integer noteDeleted = noteService.deleteNote(note);
 
         if (noteDeleted > 0) {
             model.addAttribute("updateSuccess", true);

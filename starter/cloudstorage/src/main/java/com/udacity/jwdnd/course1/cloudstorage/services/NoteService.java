@@ -27,9 +27,7 @@ public class NoteService {
         return noteMapper.updateNote(note);
     }
 
-    public Integer deleteNote(Note note, String username) {
-        User user = userService.getUser(username);
-        note.setUserId(user.getUserId());
+    public Integer deleteNote(Note note) {
         return noteMapper.deleteNote(note.getNoteId());
     }
 

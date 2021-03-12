@@ -71,7 +71,21 @@ public class CredentialController {
         if (credentialChanged > 0) {
             model.addAttribute("updateSuccess", true);
         } else {
-            model.addAttribute("updateFail", "There was error updating the note!");
+            model.addAttribute("updateFail", "There was error updating the credential!");
+        }
+
+        return "result";
+    }
+
+    @DeleteMapping
+    public String deleteCredential(@ModelAttribute Credential credential, Model model) {
+
+        Integer noteDeleted = credentialService.deleteCredential(credential);
+
+        if (noteDeleted > 0) {
+            model.addAttribute("updateSuccess", true);
+        } else {
+            model.addAttribute("updateFail", "There was error deleting the credential!");
         }
 
         return "result";

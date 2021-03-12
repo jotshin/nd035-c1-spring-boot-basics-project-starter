@@ -15,8 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.Alphanumeric.class)
@@ -55,7 +54,7 @@ class CredentialOperationTests {
 
         login();
 
-        WebElement newCredentialButton = navigateToCredentialTabAndCheckUsername("Example Credential URL", "Example Credential Username", newCredentialButtonString);
+        WebElement newCredentialButton = navigateToCredentialTabAndCheckUsername("Example Credential Password", "Example Credential Username", newCredentialButtonString);
 
         Util.click(driver, newCredentialButton);
 
@@ -64,38 +63,59 @@ class CredentialOperationTests {
 
         checkSuccessResult();
 
-        navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin", newCredentialButtonString);
+        navigateToCredentialTabAndCheckUsername("1234", "admin", newCredentialButtonString);
 
         logout();
     }
 
     @Test
-    public void testUpdateCredential() {
+    public void testEditCredential() {
         login();
 
-        WebElement updateCredentialButton = navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin", updateCredentialButtonString);
+        WebElement updateCredentialButton = navigateToCredentialTabAndCheckUsername("1234", "admin", credentialUpdateButtonString);
 
         Util.click(driver, updateCredentialButton);
 
-        waitUntilElementClickable(credentialTitleString);
+        WebElement passwordField = waitUntilElementClickable(credentialPasswordString);
+        assertEquals(passwordField.getAttribute("value"), "1234");
         homePage.fillCredentialInfoAndSubmit("admin1");
 
         checkSuccessResult();
 
-        navigateToCredentialTabAndCheckUsername("https://localhost:8080/login", "admin1", updateCredentialButtonString);
+        navigateToCredentialTabAndCheckUsername("1234", "admin1", credentialUpdateButtonString);
 
         logout();
     }
 
-    private WebElement navigateToCredentialTabAndCheckUsername(String url, String username, String buttonId) {
+    @Test
+    public void testRemoveCredential() {
+        login();
+
+        WebElement deleteButton = navigateToCredentialTabAndCheckUsername("1234", "admin1", credentialDeleteButtonString);
+
+        click(driver, deleteButton);
+
+        WebElement credentialSubmitButton = waitUntilElementClickable(credentialAddSubmitButtonString);
+        click(driver, credentialSubmitButton);
+
+        checkSuccessResult();
+
+        navigateToCredentialTabAndCheckUsername("Example Credential Password", "Example Credential Username", newCredentialButtonString);
+
+        logout();
+    }
+
+    private WebElement navigateToCredentialTabAndCheckUsername(String password, String username, String buttonId) {
         WebElement navNotesTab = waitUntilElementClickable(navCredentialsTabString);
         click(driver, navNotesTab);
 
         WebElement button = waitUntilElementClickable(buttonId);
         assertNotNull(button);
 
-        WebElement header = driver.findElement(By.cssSelector("#credentialTable > tbody > tr > td:nth-child(3)"));
-        assertEquals(username, header.getText());
+        WebElement usernameField = driver.findElement(By.cssSelector("#credentialTable > tbody > tr > td:nth-child(3)"));
+        assertEquals(username, usernameField.getText());
+        WebElement passwordField = driver.findElement(By.cssSelector("#credentialTable > tbody > tr > td:nth-child(3)"));
+        assertNotEquals(password, passwordField.getText());
 
         return button;
     }

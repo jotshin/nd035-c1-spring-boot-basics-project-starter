@@ -25,8 +25,9 @@ public class Util {
     public static final String credentialUrlString = "credential-url";
     public static final String credentialUsernameString = "credential-username";
     public static final String credentialPasswordString = "credential-password";
-    public static final String credentialAddSubmitButtonString = "credentialSubmit";
-    public static final String updateCredentialButtonString = "update-credential-button";
+    public static final String credentialAddSubmitButtonString = "credential-submit-button";
+    public static final String credentialUpdateButtonString = "update-credential-button";
+    public static final String credentialDeleteButtonString = "delete-credential-button";
 
 
     // SignupPage

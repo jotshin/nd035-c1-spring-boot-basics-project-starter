@@ -24,4 +24,7 @@ public interface CredentialMapper {
             + "key = #{key} "
             + "where credentialid = #{credentialId}")
     Integer updateCredential(Credential credential);
+
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialId}")
+    Integer deleteCredential(Integer credentialId);
 }
