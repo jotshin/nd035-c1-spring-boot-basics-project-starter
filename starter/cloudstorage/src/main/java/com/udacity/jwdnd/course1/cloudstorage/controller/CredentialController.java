@@ -1,15 +1,14 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.security.Principal;
 
 @Controller
@@ -23,11 +22,15 @@ public class CredentialController {
 
     @GetMapping("{credentialId}")
     @ResponseBody
-    public ResponseEntity<Credential> getCredential(@PathVariable(name = "credentialId") Integer credentialId) {
+    public ResponseEntity<Credential> getCredential(@PathVariable(name = "credentialId") Integer credentialId, Principal principal) throws AuthenticationException {
         try {
-            return new ResponseEntity<>(credentialService.getCredential(credentialId), HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(credentialService.getCredential(credentialId, principal.getName()), HttpStatus.OK);
+        } catch (Exception e) {
+            if (e.getClass().isAssignableFrom(AuthenticationException.class)) {
+                throw e;
+            } else {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
     }
 
@@ -65,8 +68,8 @@ public class CredentialController {
     }
 
     @PutMapping
-    public String updateCredential(@ModelAttribute Credential credential, Model model) {
-        Integer credentialChanged = credentialService.updateCredential(credential);
+    public String updateCredential(@ModelAttribute Credential credential, Model model, Principal principal) throws AuthenticationException {
+        Integer credentialChanged = credentialService.updateCredential(credential, principal.getName());
 
         if (credentialChanged > 0) {
             model.addAttribute("updateSuccess", true);
@@ -78,9 +81,9 @@ public class CredentialController {
     }
 
     @DeleteMapping
-    public String deleteCredential(@ModelAttribute Credential credential, Model model) {
+    public String deleteCredential(@ModelAttribute Credential credential, Model model, Principal principal) throws AuthenticationException {
 
-        Integer noteDeleted = credentialService.deleteCredential(credential);
+        Integer noteDeleted = credentialService.deleteCredential(credential, principal.getName());
 
         if (noteDeleted > 0) {
             model.addAttribute("updateSuccess", true);

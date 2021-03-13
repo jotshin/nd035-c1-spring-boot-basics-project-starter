@@ -18,12 +18,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // TODO: remove h2 config for production
         http.authorizeRequests()
                 .antMatchers("/signup", "/css/**", "/js/**", "/h2/**").permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().ignoringAntMatchers("/h2/**")
-                .and().headers().frameOptions().sameOrigin();
+                .anyRequest().authenticated();
+
+        // for h2 debugging purpose
+//        http.authorizeRequests()
+//                .antMatchers("/signup", "/css/**", "/js/**", "/h2/**").permitAll()
+//                .anyRequest().authenticated()
+//                .and().csrf().ignoringAntMatchers("/h2/**")
+//                .and().headers().frameOptions().sameOrigin();
 
         http.formLogin()
                 .loginPage("/login")

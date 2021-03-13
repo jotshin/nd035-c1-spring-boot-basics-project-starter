@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.AuthenticationException;
 import java.security.Principal;
 
 @Controller
@@ -31,8 +32,8 @@ public class NoteController {
     }
 
     @PutMapping
-    public String updateNote(@ModelAttribute Note note, Model model) {
-        Integer noteChanged = noteService.updateNote(note);
+    public String updateNote(@ModelAttribute Note note, Model model, Principal principal) throws AuthenticationException {
+        Integer noteChanged = noteService.updateNote(note, principal.getName());
 
         if (noteChanged > 0) {
             model.addAttribute("updateSuccess", true);
@@ -44,9 +45,9 @@ public class NoteController {
     }
 
     @DeleteMapping
-    public String deleteNote(@ModelAttribute Note note, Model model) {
+    public String deleteNote(@ModelAttribute Note note, Model model, Principal principal) throws AuthenticationException {
 
-        Integer noteDeleted = noteService.deleteNote(note);
+        Integer noteDeleted = noteService.deleteNote(note, principal.getName());
 
         if (noteDeleted > 0) {
             model.addAttribute("updateSuccess", true);

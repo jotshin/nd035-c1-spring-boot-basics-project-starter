@@ -5,6 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 
 @Service
@@ -23,11 +24,21 @@ public class NoteService {
         return noteMapper.insert(note);
     }
 
-    public Integer updateNote(Note note) {
+    public Integer updateNote(Note note, String username) throws AuthenticationException {
+        User user = userService.getUser(username);
+        Note existingNote = noteMapper.getNote(note.getNoteId());
+        if (user.getUserId() != existingNote.getUserId()) {
+            throw new AuthenticationException("You do not have access to this file.");
+        }
         return noteMapper.updateNote(note);
     }
 
-    public Integer deleteNote(Note note) {
+    public Integer deleteNote(Note note, String username) throws AuthenticationException {
+        User user = userService.getUser(username);
+        Note existingNote = noteMapper.getNote(note.getNoteId());
+        if (user.getUserId() != existingNote.getUserId()) {
+            throw new AuthenticationException("You do not have access to this file.");
+        }
         return noteMapper.deleteNote(note.getNoteId());
     }
 

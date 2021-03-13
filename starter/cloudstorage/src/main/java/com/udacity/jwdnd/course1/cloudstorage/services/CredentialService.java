@@ -2,10 +2,10 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
-import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
 
+import javax.naming.AuthenticationException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.List;
@@ -22,8 +22,12 @@ public class CredentialService {
         this.encryptionService = encryptionService;
     }
 
-    public Credential getCredential(Integer credentialId) {
+    public Credential getCredential(Integer credentialId, String username) throws AuthenticationException {
         Credential credential = credentialMapper.getCredential(credentialId);
+        User user = userService.getUser(username);
+        if (user.getUserId() != credential.getUserId()) {
+            throw new AuthenticationException("You do not have access to this file.");
+        }
         credential.setPassword(encryptionService.decryptValue(credential.getPassword(), credential.getKey()));
         return credential;
     }
@@ -41,13 +45,23 @@ public class CredentialService {
         return credentialMapper.insert(credential);
     }
 
-    public Integer updateCredential(Credential credential) {
+    public Integer updateCredential(Credential credential, String username) throws AuthenticationException {
+        Credential existingCredential = credentialMapper.getCredential(credential.getCredentialId());
+        User user = userService.getUser(username);
+        if (user.getUserId() != existingCredential.getUserId()) {
+            throw new AuthenticationException("You do not have access to this file.");
+        }
         credential.setKey(encodedKey());
         credential.setPassword(encryptedPassword(credential.getPassword(), credential.getKey()));
         return credentialMapper.updateCredential(credential);
     }
 
-    public Integer deleteCredential(Credential credential) {
+    public Integer deleteCredential(Credential credential, String username) throws AuthenticationException {
+        Credential existingCredential = credentialMapper.getCredential(credential.getCredentialId());
+        User user = userService.getUser(username);
+        if (user.getUserId() != existingCredential.getUserId()) {
+            throw new AuthenticationException("You do not have access to this file.");
+        }
         return credentialMapper.deleteCredential(credential.getCredentialId());
     }
 

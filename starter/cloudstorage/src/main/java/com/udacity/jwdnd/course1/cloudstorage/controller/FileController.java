@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.security.Principal;
 
@@ -25,8 +26,8 @@ public class FileController {
     }
 
     @GetMapping("/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId) {
-        File file = fileService.getFile(fileId);
+    public ResponseEntity<Resource> downloadFile(@PathVariable Integer fileId, Principal principal) throws AuthenticationException {
+        File file = fileService.getFile(fileId, principal.getName());
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
                 .body(new ByteArrayResource(file.getFileData()));
@@ -49,7 +50,6 @@ public class FileController {
         }
 
         if (errorMsg == null) {
-            // TODO: handle exception
             Integer currentFileId = this.fileService.uploadFile(file, principal.getName());
             if (currentFileId < 0) {
                 errorMsg = "There was error uploading this file!";
@@ -66,8 +66,7 @@ public class FileController {
     }
 
     @DeleteMapping
-    public String deleteFile(@ModelAttribute File file, Principal principal, Model model) {
-
+    public String deleteFile(@ModelAttribute File file, Principal principal, Model model) throws AuthenticationException {
         Integer fileDeleted = fileService.deleteFile(file, principal.getName());
 
         if (fileDeleted > 0) {
