@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.naming.AuthenticationException;
 import java.security.Principal;
@@ -22,14 +23,14 @@ public class CredentialController {
 
     @GetMapping("{credentialId}")
     @ResponseBody
-    public ResponseEntity<Credential> getCredential(@PathVariable(name = "credentialId") Integer credentialId, Principal principal) throws AuthenticationException {
+    public ResponseEntity<Credential> getCredential(@PathVariable(name = "credentialId") Integer credentialId, Principal principal) throws AuthenticationException, HttpClientErrorException.BadRequest {
         try {
             return new ResponseEntity<>(credentialService.getCredential(credentialId, principal.getName()), HttpStatus.OK);
         } catch (Exception e) {
             if (e.getClass().isAssignableFrom(AuthenticationException.class)) {
                 throw e;
             } else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
             }
         }
     }
