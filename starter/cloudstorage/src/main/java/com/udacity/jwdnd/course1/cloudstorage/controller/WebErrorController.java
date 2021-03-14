@@ -14,9 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 public class WebErrorController implements ErrorController {
 
     @GetMapping
-    public String handleError(HttpServletRequest request, Model model) {
-        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-        model.addAttribute("updateFail", "Status code: " + status.toString() + " OOPS! Please make sure your input is correct.");
+    public String handleError(Model model) {
+        model.addAttribute("updateFail", "OOPS! Please make sure your input is correct.");
         return "result";
     }
 
