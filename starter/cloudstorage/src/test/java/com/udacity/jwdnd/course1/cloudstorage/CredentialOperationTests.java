@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage;
 
 import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
+import com.udacity.jwdnd.course1.cloudstorage.pages.ResultPage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.SignupPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -9,8 +10,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -28,6 +27,7 @@ class CredentialOperationTests {
     private SignupPage signupPage;
     private LoginPage loginPage;
     private HomePage homePage;
+    private ResultPage resultPage;
 
     @BeforeAll
     static void beforeAll() {
@@ -42,74 +42,78 @@ class CredentialOperationTests {
 
     @BeforeEach
     public void beforeEach() {
-        baseURL = baseURL = "http://localhost:" + port;
+        baseURL = "http://localhost:" + port;
         signupPage = new SignupPage(driver);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
+        resultPage = new ResultPage(driver);
     }
 
     @Test
     public void testCreateCredential() {
-        signup();
+        signupPage.signup(driver, baseURL);
 
-        login();
+        loginPage.login(driver, baseURL);
 
         WebElement newCredentialButton = navigateToCredentialTabAndCheckUsername("Example Credential Password", "Example Credential Username", newCredentialButtonString);
 
         Util.click(driver, newCredentialButton);
 
-        waitUntilElementClickable(credentialTitleString);
+        waitUntilElementClickable(driver, credentialTitleString);
         homePage.fillCredentialInfoAndSubmit("admin");
 
-        checkSuccessResult();
+        resultPage.checkSuccessResult();
 
         navigateToCredentialTabAndCheckUsername("1234", "admin", newCredentialButtonString);
 
-        logout();
+        homePage.logout(driver);
     }
 
     @Test
     public void testEditCredential() {
-        login();
+        loginPage.login(driver, baseURL);
 
         WebElement updateCredentialButton = navigateToCredentialTabAndCheckUsername("1234", "admin", credentialUpdateButtonString);
 
         Util.click(driver, updateCredentialButton);
 
-        WebElement passwordField = waitUntilElementClickable(credentialPasswordString);
+        WebElement passwordField = waitUntilElementClickable(driver, credentialPasswordString);
+
+        // check if password is decrypted
         assertEquals(passwordField.getAttribute("value"), "1234");
+
         homePage.fillCredentialInfoAndSubmit("admin1");
 
-        checkSuccessResult();
+        resultPage.checkSuccessResult();
 
         navigateToCredentialTabAndCheckUsername("1234", "admin1", credentialUpdateButtonString);
 
-        logout();
+        homePage.logout(driver);
     }
 
     @Test
     public void testRemoveCredential() {
-        login();
+        loginPage.login(driver, baseURL);
 
         WebElement deleteButton = navigateToCredentialTabAndCheckUsername("1234", "admin1", credentialDeleteButtonString);
 
         click(driver, deleteButton);
 
-        WebElement credentialSubmitButton = waitUntilElementClickable(credentialAddSubmitButtonString);
+        WebElement credentialSubmitButton = waitUntilElementClickable(driver, credentialAddSubmitButtonString);
         click(driver, credentialSubmitButton);
 
-        checkSuccessResult();
+        resultPage.checkSuccessResult();
 
         navigateToCredentialTabAndCheckUsername("Example Credential Password", "Example Credential Username", newCredentialButtonString);
 
-        logout();
+        homePage.logout(driver);
     }
 
     private WebElement navigateToCredentialTabAndCheckUsername(String password, String username, String buttonId) {
-        WebElement navNotesTab = waitUntilElementClickable(navCredentialsTabString);
+        WebElement navNotesTab = waitUntilElementClickable(driver, navCredentialsTabString);
         click(driver, navNotesTab);
 
-        WebElement button = waitUntilElementClickable(buttonId);
+        WebElement button = waitUntilElementClickable(driver, buttonId);
         assertNotNull(button);
 
         WebElement usernameField = driver.findElement(By.cssSelector("#credentialTable > tbody > tr > td:nth-child(3)"));
@@ -118,43 +122,5 @@ class CredentialOperationTests {
         assertNotEquals(password, passwordField.getText());
 
         return button;
-    }
-
-    private void checkSuccessResult() {
-        WebElement successLink = waitUntilElementClickable(successAlertString);
-
-        click(driver, successLink);
-    }
-
-    private void signup() {
-        String username = "tj";
-
-        driver.get(baseURL + "/signup");
-
-        signupPage.fillInfoAndSubmit(username);
-    }
-
-    private void login() {
-        String username = "tj";
-
-        driver.get(baseURL + "/login");
-
-        waitUntilElementClickable(signupLinkString);
-
-        loginPage.fillInfoAndSubmit(username);
-    }
-
-    private void logout() {
-        WebElement logoutButton = waitUntilElementClickable(logoutButtonString);
-        assertNotNull(logoutButton);
-
-        click(driver, logoutButton);
-
-        waitUntilElementClickable(signupLinkString);
-    }
-
-    private WebElement waitUntilElementClickable(String id) {
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        return wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
     }
 }

@@ -25,9 +25,6 @@ public class SignupPage {
     @FindBy(id = submitButtonString)
     private WebElement submitButton;
 
-    @FindBy(id = successMessage)
-    private WebElement successMsg;
-
     public SignupPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -41,7 +38,11 @@ public class SignupPage {
         click(driver, submitButton);
     }
 
-    public String getSuccessText() {
-        return successMsg.getText();
+    public void signup(WebDriver driver, String baseURL) {
+        String username = "tj";
+
+        driver.get(baseURL + "/signup");
+
+        fillInfoAndSubmit(username);
     }
 }

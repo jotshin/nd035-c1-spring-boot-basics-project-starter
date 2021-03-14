@@ -4,19 +4,16 @@ import com.udacity.jwdnd.course1.cloudstorage.pages.HomePage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.LoginPage;
 import com.udacity.jwdnd.course1.cloudstorage.pages.SignupPage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.safari.SafariDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
-import static com.udacity.jwdnd.course1.cloudstorage.Util.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserOperationTests {
@@ -42,7 +39,7 @@ class UserOperationTests {
 
     @BeforeEach
     public void beforeEach() {
-        baseURL = baseURL = "http://localhost:" + port;
+        baseURL = "http://localhost:" + port;
         signupPage = new SignupPage(driver);
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
@@ -70,60 +67,12 @@ class UserOperationTests {
 
     @Test
     public void testSigningInAndOut() {
-        signupAndLogin();
+        signupPage.signup(driver, baseURL);
 
-        logout();
+        loginPage.login(driver, baseURL);
+
+        homePage.logout(driver);
 
         testUnauthorizedAccess();
-    }
-
-    private void signupAndLogin() {
-        String username = "tj";
-
-        driver.get(baseURL + "/signup");
-
-        signupPage.fillInfoAndSubmit(username);
-
-        driver.get(baseURL + "/login");
-
-        waitUntilElementClickable(signupLinkString);
-
-        loginPage.fillInfoAndSubmit(username);
-    }
-
-    private void logout() {
-        WebElement logoutButton = waitUntilElementClickable(logoutButtonString);
-        assertNotNull(logoutButton);
-
-        click(driver, logoutButton);
-
-        waitUntilElementClickable(signupLinkString);
-    }
-
-//    private void fillLoginInfoAndVerify(String username) {
-//        waitUntilElementIdFound(loginPage.signupLinkString);
-//
-//        loginPage.fillInfoAndSubmit(username);
-//
-//        WebElement messageText = waitUntilElementIdFound("messageText");
-//        assertNotNull(messageText);
-//
-//        if (username == "tj") {
-//            waitUntilElementIdFound(chat.messageTextString);
-//            chat.fillInfoAndSubmit();
-//        }
-//
-//        WebElement span = waitUntilElementTagFound("span");
-//        assertTrue(span.getText().contains("tj: Test"));
-//    }
-
-    private WebElement waitUntilElementClickable(String id) {
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        return wait.until(ExpectedConditions.elementToBeClickable(By.id(id)));
-    }
-
-    private WebElement waitUntilElementTagFound(String tag) {
-        WebDriverWait wait = new WebDriverWait(driver, 3);
-        return wait.until(webDriver -> webDriver.findElement(By.tagName(tag)));
     }
 }
